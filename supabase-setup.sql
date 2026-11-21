@@ -1,6 +1,3 @@
--- Likes de commentaires et réponses imbriquées dans confam_comments.
-alter table public.confam_comments add column if not exists parent_comment_id uuid references public.confam_comments(id) on delete cascade;
-create table if not exists public.confam_comment_likes (comment_id uuid not null references public.confam_comments(id) on delete cascade,user_id uuid not null references public.confam_profiles(id) on delete cascade,created_at timestamptz not null default now(),primary key(comment_id,user_id));
 -- CONFAM — Base de données Supabase
 -- Script autonome : crée uniquement des objets préfixés confam_ et ne supprime aucune donnée existante.
 -- À exécuter une seule fois dans Supabase > SQL Editor.
@@ -47,6 +44,10 @@ create table if not exists public.confam_comments (
   content text not null check(length(trim(content)) between 1 and 500),
   created_at timestamptz not null default now()
 );
+
+-- Likes de commentaires et réponses imbriquées.
+alter table public.confam_comments add column if not exists parent_comment_id uuid references public.confam_comments(id) on delete cascade;
+create table if not exists public.confam_comment_likes (comment_id uuid not null references public.confam_comments(id) on delete cascade,user_id uuid not null references public.confam_profiles(id) on delete cascade,created_at timestamptz not null default now(),primary key(comment_id,user_id));
 
 create table if not exists public.confam_follows (
   follower_id uuid not null references public.confam_profiles(id) on delete cascade,
