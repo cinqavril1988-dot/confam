@@ -799,3 +799,18 @@ html{
 @keyframes confamNeonWave{0%{transform:scaleY(.28);opacity:.45}40%{transform:scaleY(1.15);opacity:1}100%{transform:scaleY(.45);opacity:.7}}
 @media(max-width:560px){.audio-player .waveform{height:11px!important}}
 @media(prefers-reduced-motion:reduce){.audio-player .waveform span{animation:none!important}}
+
+/* CONFAM — Audio post cover + spectrum preview in composer */
+.audio-compose-preview{display:flex;align-items:center;gap:9px;padding:7px;background:#faf8ff;border:1px solid #eee5ff;border-radius:12px;max-width:330px}
+.audio-cover-preview,.audio-cover-empty{width:58px;height:58px;min-width:58px;aspect-ratio:1/1;object-fit:cover;border-radius:9px;overflow:hidden}
+.audio-cover-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0e5ff,#ffe7f7);color:#9855df;font-size:17px}
+.audio-cover-empty small{font-size:8px;color:#8a6aab;margin-top:2px}
+.audio-compose-wave{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.audio-compose-play{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#9b5cff,#e34ab8);color:white;font-size:10px;flex-shrink:0}
+.audio-compose-spectrum{height:28px;display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+.audio-compose-spectrum i{display:block;width:2px;min-width:2px;height:var(--bar);max-height:22px;border-radius:4px;background:linear-gradient(180deg,#d78aff,#8b5cf6,#e950bb);opacity:.8}
+.audio-compose-hint{font-size:10px;color:#8b5cf6;margin:5px 0 0 3px}
+.composer-image-preview{display:flex;align-items:center;gap:8px;margin-top:6px}
+.composer-image-preview img{width:58px;height:58px;aspect-ratio:1/1;object-fit:cover;border-radius:9px}
+.composer-image-preview span{font-size:10px;color:#777}
+@media(max-width:560px){.audio-compose-preview{max-width:100%;gap:7px;padding:6px}.audio-cover-preview,.audio-cover-empty,.composer-image-preview img{width:52px;height:52px;min-width:52px}.audio-compose-spectrum{height:24px}.audio-compose-spectrum i{max-height:19px}}
