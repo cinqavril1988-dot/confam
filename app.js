@@ -119,29 +119,34 @@
   }
   async function submitPostDuel(e){
     e.preventDefault();
-    const form=e.target,target=form.dataset.target,originalPost=form.dataset.post,title=$('post-duel-title').value.trim(),description=$('post-duel-description').value.trim(),btn=$('post-duel-submit');
-    if(!title){$('post-duel-message').textContent='Indique le thème du Duel.';return}
+    const form=e.target,target=form.dataset.target,originalPost=form.dataset.post,title=$('post-duel-title').value.trim(),description=$('post-duel-description').value.trim(),btn=$('post-duel-submit'),msg=$('post-duel-message');
+    if(!title){msg.textContent='Indique le thème du Duel.';return}
     let challengerId=null,challengerPostId=null,audioFile=null;
     if(profile?.role==='artist'){
       challengerId=user.id;audioFile=postDuelRecordedFile||$('post-duel-audio').files[0];
-      if(!audioFile){$('post-duel-message').textContent='Ajoute un fichier audio ou enregistre une note vocale pour participer.';return}
+      if(!audioFile){msg.textContent='Ajoute un fichier audio ou enregistre une note vocale pour participer.';return}
     }else{
       challengerId=$('post-duel-challenger').value;challengerPostId=$('post-duel-challenger-post').value||null;
-      if(!challengerId){$('post-duel-message').textContent='Choisis l’artiste qui sera le second concurrent.';return}
+      if(!challengerId){msg.textContent='Choisis l’artiste qui sera le second concurrent.';return}
     }
-    if(challengerId===target){$('post-duel-message').textContent='Choisis un autre artiste.';return}
-    btn.disabled=true;btn.textContent='Préparation du Duel…';$('post-duel-message').textContent='';
+    if(challengerId===target){msg.textContent='Choisis un autre artiste.';return}
+    btn.disabled=true;btn.textContent='Préparation du Duel…';msg.textContent='Connexion à CONFAM…';
+    const withTimeout=(promise,ms,label)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error(label+' prend trop de temps. Vérifie ta connexion puis réessaie.')),ms))]);
     try{
       if(profile?.role==='artist'){
-        const audioName=postDuelRecordedFileName||audioFile.name||'note-vocale-duel';const uploaded=await uploadFile(audioFile,'confam-audio',audioName);
-        const {data:createdPost,error:postError}=await db.from('confam_posts').insert({user_id:user.id,content:'',audio_url:uploaded.url,audio_path:uploaded.path,audio_name:audioName,post_type:postDuelRecordedFile?'voice_note':'audio'}).select('id').single();
+        msg.textContent='Envoi de la note vocale…';
+        const audioName=postDuelRecordedFileName||audioFile.name||'note-vocale-duel';
+        const uploaded=await withTimeout(uploadFile(audioFile,'confam-audio',audioName),25000,'Téléversement audio');
+        msg.textContent='Création du Duel…';
+        const {data:createdPost,error:postError}=await withTimeout(db.from('confam_posts').insert({user_id:user.id,content:'',audio_url:uploaded.url,audio_path:uploaded.path,audio_name:audioName,post_type:postDuelRecordedFile?'voice_note':'audio'}).select('id').single(),20000,'Création du post audio');
         if(postError)throw postError;challengerPostId=createdPost.id;
       }
-      btn.textContent='Envoi de la demande…';
-      const {error}=await db.rpc('confam_create_faceoff',{p_title:title,p_description:description,p_artist_a_id:target,p_artist_b_id:challengerId,p_post_a_id:originalPost,p_post_b_id:challengerPostId,p_ends_at:null});
+      btn.textContent='Envoi de la demande…';msg.textContent='Enregistrement du Duel…';
+      const {data:duelId,error}=await withTimeout(db.rpc('confam_create_faceoff',{p_title:title,p_description:description,p_artist_a_id:target,p_artist_b_id:challengerId,p_post_a_id:originalPost,p_post_b_id:challengerPostId,p_ends_at:null}),20000,'Création du Duel');
       if(error)throw error;
-      $('post-duel-modal').classList.add('hidden');notify('Demande de Duel envoyée.');await loadFaceoffs();
-    }catch(err){$('post-duel-message').textContent=err.message||'Impossible de créer le Duel.'}
+      msg.textContent='Duel créé. Chargement…';$('post-duel-modal').classList.add('hidden');notify('Demande de Duel envoyée.');
+      loadFaceoffs().catch(err=>{console.error('Chargement Duels:',err);notify('Duel créé, mais la liste n’a pas pu se rafraîchir.')});
+    }catch(err){console.error('CONFAM demande Duel:',err);msg.textContent='Échec : '+(err.message||'Impossible de créer le Duel.');}
     finally{btn.disabled=false;btn.textContent='Lancer le Duel →'}
   }
   async function uploadFile(file,bucket,filenameOverride=''){if(!file)return null;const max=bucket==='confam-audio'?50:10;if(file.size>max*1024*1024)throw new Error(`Fichier trop volumineux (maximum ${max} Mo).`);const filename=filenameOverride||file.name||'audio';const ext=(filename.split('.').pop()||((file.type||'').split('/')[1]||'bin')).replace(/[^a-z0-9]/gi,'');const path=`${user.id}/${Date.now()}-${crypto.randomUUID()}.${ext}`;const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false,contentType:file.type||'application/octet-stream'});if(error)throw error;const {data}=db.storage.from(bucket).getPublicUrl(path);return {url:data.publicUrl,path}}
