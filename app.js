@@ -40,7 +40,7 @@
     if(!navigator.mediaDevices?.getUserMedia)throw new Error('Ce navigateur ne permet pas l’accès au micro. Ouvre CONFAM dans Chrome à jour via HTTPS.');
     return navigator.mediaDevices.getUserMedia({audio:true});
   }
-  let postDuelRecorder=null,postDuelChunks=[],postDuelRecordedFile=null,postDuelStream=null,postDuelRecordingTimer=null,postDuelRecordingStartedAt=0;
+  let postDuelRecorder=null,postDuelChunks=[],postDuelRecordedFile=null,postDuelRecordedFileName='',postDuelStream=null,postDuelRecordingTimer=null,postDuelRecordingStartedAt=0;
   function stopPostDuelRecordingTimer(){if(postDuelRecordingTimer){clearInterval(postDuelRecordingTimer);postDuelRecordingTimer=null}}
   function updatePostDuelRecordingTimer(){const elapsed=Math.floor((Date.now()-postDuelRecordingStartedAt)/1000);const mm=String(Math.floor(elapsed/60)).padStart(2,'0'),ss=String(elapsed%60).padStart(2,'0');$('post-duel-record-status').dataset.elapsed=mm+':'+ss;$('post-duel-record-status').textContent='● ENREGISTREMENT EN COURS · '+mm+':'+ss}
   async function openPostDuelRequest(postId,artistId,artistName){
@@ -69,13 +69,13 @@
       </form></div></div>`);
       modal=$('post-duel-modal');
       $('post-duel-challenger').addEventListener('change',loadPostDuelChallengerPosts);
-      $('post-duel-audio').addEventListener('change',e=>{postDuelRecordedFile=null;$('post-duel-file-name').textContent=e.target.files[0]?.name||''});
+      $('post-duel-audio').addEventListener('change',e=>{postDuelRecordedFile=null;postDuelRecordedFileName='';$('post-duel-file-name').textContent=e.target.files[0]?.name||''});
       $('post-duel-record').addEventListener('click',togglePostDuelRecording);
       $('post-duel-form').addEventListener('submit',submitPostDuel);
     }
     if(postDuelRecorder&&postDuelRecorder.state==='recording'){postDuelRecorder.stop()}
     stopPostDuelRecordingTimer();postDuelRecordingStartedAt=0;
-    postDuelRecordedFile=null;$('post-duel-audio').value='';$('post-duel-file-name').textContent='';$('post-duel-record-status').textContent='';$('post-duel-record').textContent='● Enregistrer une note vocale';$('post-duel-title').value='';$('post-duel-description').value='';
+    postDuelRecordedFile=null;postDuelRecordedFileName='';$('post-duel-audio').value='';$('post-duel-file-name').textContent='';$('post-duel-record-status').textContent='';$('post-duel-record').textContent='● Enregistrer une note vocale';$('post-duel-title').value='';$('post-duel-description').value='';
     $('post-duel-target').textContent=artistName;
     $('post-duel-message').textContent='';
     const form=$('post-duel-form');form.dataset.target=artistId;form.dataset.post=postId;
@@ -101,7 +101,7 @@
   async function togglePostDuelRecording(){
     const button=$('post-duel-record');
     if(postDuelRecorder&&postDuelRecorder.state==='recording'){postDuelRecorder.stop();button.disabled=true;button.textContent='Préparation…';stopPostDuelRecordingTimer();return}
-    if(!window.MediaRecorder||!navigator.mediaDevices?.getUserMedia){chooseAudioFallback(f=>{postDuelRecordedFile=f;$('post-duel-file-name').textContent='Audio sélectionné · '+f.name;$('post-duel-record-status').textContent='Audio prêt pour le Duel.'},$('post-duel-record-status'));return}
+    if(!window.MediaRecorder||!navigator.mediaDevices?.getUserMedia){chooseAudioFallback(f=>{postDuelRecordedFile=f;postDuelRecordedFileName=f.name||'audio-duel';$('post-duel-file-name').textContent='Audio sélectionné · '+postDuelRecordedFileName;$('post-duel-record-status').textContent='Audio prêt pour le Duel.'},$('post-duel-record-status'));return}
     try{
       postDuelStream=await requestMicrophoneAccess();postDuelChunks=[];
       const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'';
@@ -111,11 +111,11 @@
         stopPostDuelRecordingTimer();
         postDuelStream?.getTracks().forEach(t=>t.stop());postDuelStream=null;
         const blob=new Blob(postDuelChunks,{type:postDuelRecorder?.mimeType||'audio/webm'});
-        if(blob.size){postDuelRecordedFile=new File([blob],'duel-note-vocale.webm',{type:blob.type});$('post-duel-audio').value='';$('post-duel-file-name').textContent='Note vocale prête · '+(blob.size/1024/1024).toFixed(2)+' Mo';$('post-duel-record-status').textContent='✓ Enregistrement terminé · '+$('post-duel-record-status').dataset.elapsed}
+        if(blob.size){postDuelRecordedFile=blob;postDuelRecordedFileName='duel-note-vocale.'+((blob.type.split('/')[1]||'webm').split(';')[0]);$('post-duel-audio').value='';$('post-duel-file-name').textContent='Note vocale prête · '+(blob.size/1024/1024).toFixed(2)+' Mo';$('post-duel-record-status').textContent='✓ Enregistrement terminé · '+$('post-duel-record-status').dataset.elapsed}
         button.disabled=false;button.textContent='● Recommencer la note vocale';postDuelRecorder=null;
       };
       postDuelRecorder.start();postDuelRecordingStartedAt=Date.now();updatePostDuelRecordingTimer();stopPostDuelRecordingTimer();postDuelRecordingTimer=setInterval(updatePostDuelRecordingTimer,250);button.textContent='■ Arrêter l’enregistrement';
-    }catch(err){stopPostDuelRecordingTimer();postDuelStream?.getTracks().forEach(t=>t.stop());postDuelStream=null;if(err?.name==='NotAllowedError'||!navigator.mediaDevices?.getUserMedia){chooseAudioFallback(f=>{postDuelRecordedFile=f;$('post-duel-file-name').textContent='Audio sélectionné · '+f.name;$('post-duel-record-status').textContent='Audio prêt pour le Duel.'},$('post-duel-record-status'))}else $('post-duel-record-status').textContent=microphoneAccessError(err)}
+    }catch(err){stopPostDuelRecordingTimer();postDuelStream?.getTracks().forEach(t=>t.stop());postDuelStream=null;if(err?.name==='NotAllowedError'||!navigator.mediaDevices?.getUserMedia){chooseAudioFallback(f=>{postDuelRecordedFile=f;postDuelRecordedFileName=f.name||'audio-duel';$('post-duel-file-name').textContent='Audio sélectionné · '+postDuelRecordedFileName;$('post-duel-record-status').textContent='Audio prêt pour le Duel.'},$('post-duel-record-status'))}else $('post-duel-record-status').textContent=microphoneAccessError(err)}
   }
   async function submitPostDuel(e){
     e.preventDefault();
@@ -133,8 +133,8 @@
     btn.disabled=true;btn.textContent='Préparation du Duel…';$('post-duel-message').textContent='';
     try{
       if(profile?.role==='artist'){
-        const uploaded=await uploadFile(audioFile,'confam-audio');
-        const {data:createdPost,error:postError}=await db.from('confam_posts').insert({user_id:user.id,content:'',audio_url:uploaded.url,audio_path:uploaded.path,audio_name:audioFile.name||'Note vocale du Duel',post_type:postDuelRecordedFile?'voice_note':'audio'}).select('id').single();
+        const audioName=postDuelRecordedFileName||audioFile.name||'note-vocale-duel';const uploaded=await uploadFile(audioFile,'confam-audio',audioName);
+        const {data:createdPost,error:postError}=await db.from('confam_posts').insert({user_id:user.id,content:'',audio_url:uploaded.url,audio_path:uploaded.path,audio_name:audioName,post_type:postDuelRecordedFile?'voice_note':'audio'}).select('id').single();
         if(postError)throw postError;challengerPostId=createdPost.id;
       }
       btn.textContent='Envoi de la demande…';
@@ -144,7 +144,7 @@
     }catch(err){$('post-duel-message').textContent=err.message||'Impossible de créer le Duel.'}
     finally{btn.disabled=false;btn.textContent='Lancer le Duel →'}
   }
-  async function uploadFile(file,bucket){if(!file)return null;const max=bucket==='confam-audio'?50:10;if(file.size>max*1024*1024)throw new Error(`Fichier trop volumineux (maximum ${max} Mo).`);const ext=(file.name.split('.').pop()||'bin').replace(/[^a-z0-9]/gi,'');const path=`${user.id}/${Date.now()}-${crypto.randomUUID()}.${ext}`;const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false,contentType:file.type||'application/octet-stream'});if(error)throw error;const {data}=db.storage.from(bucket).getPublicUrl(path);return {url:data.publicUrl,path}}
+  async function uploadFile(file,bucket,filenameOverride=''){if(!file)return null;const max=bucket==='confam-audio'?50:10;if(file.size>max*1024*1024)throw new Error(`Fichier trop volumineux (maximum ${max} Mo).`);const filename=filenameOverride||file.name||'audio';const ext=(filename.split('.').pop()||((file.type||'').split('/')[1]||'bin')).replace(/[^a-z0-9]/gi,'');const path=`${user.id}/${Date.now()}-${crypto.randomUUID()}.${ext}`;const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false,contentType:file.type||'application/octet-stream'});if(error)throw error;const {data}=db.storage.from(bucket).getPublicUrl(path);return {url:data.publicUrl,path}}
   async function publishPost(e){e.preventDefault();if(!user){openAuth('login');return}const content=$('post-content').value.trim(),audio=recordedAudioFile||$('post-audio').files[0],image=$('post-image').files[0];if(audio&&profile?.role!=='artist'){$('post-message').textContent='Seuls les profils Artist peuvent publier un fichier audio.';return}if(!content&&!audio&&!image){$('post-message').textContent='Ajoute un texte, un audio ou une image.';return}const btn=e.submitter;btn.disabled=true;btn.textContent='Publication…';$('post-message').textContent='';try{let au=null,im=null;if(audio)au=await uploadFile(audio,'confam-audio');if(image)im=await uploadFile(image,'confam-images');const {error}=await db.from('confam_posts').insert({user_id:user.id,content,audio_url:au?.url||null,audio_path:au?.path||null,audio_name:audio?.name||null,image_url:im?.url||null,image_path:im?.path||null,post_type:recordedVoiceNote?'voice_note':audio?'audio':'post'});if(error)throw error;$('post-form').reset();recordedAudioFile=null;recordedVoiceNote=false;$('voice-note-status').textContent='';$('voice-record-button').textContent='● Enregistrer une note vocale';$('upload-preview').textContent='';$('compose-modal').classList.add('hidden');await loadFeed();notify('Ton post est publié dans la Fam !')}catch(err){console.error('CONFAM publication:',err);$('post-message').textContent=(err.message||'Une erreur est survenue.')+(err.code?' ('+err.code+')':'')}finally{btn.disabled=false;btn.textContent='Publier →'}}
   async function toggleVoiceRecording(){if(!user){openAuth('login');return}if(profile?.role!=='artist'){notify('Les notes vocales publiées sont réservées aux profils Artist.');return}const button=$('voice-record-button');if(!window.MediaRecorder||!navigator.mediaDevices?.getUserMedia){chooseAudioFallback(f=>{recordedAudioFile=f;recordedVoiceNote=true;$('post-audio').value='';$('upload-preview').textContent='Audio choisi · '+f.name;$('voice-note-status').textContent='Audio prêt à publier.'},$('voice-note-status'));return}if(voiceRecorder&&voiceRecorder.state==='recording'){voiceRecorder.stop();button.disabled=true;button.textContent='Préparation…';return}try{const stream=await requestMicrophoneAccess();voiceChunks=[];voiceRecorder=createCompatibleRecorder(stream);voiceRecorder.ondataavailable=e=>{if(e.data&&e.data.size)voiceChunks.push(e.data)};voiceRecorder.onstop=()=>{stream.getTracks().forEach(t=>t.stop());const blob=new Blob(voiceChunks,{type:voiceRecorder.mimeType||'audio/webm'});if(blob.size){recordedAudioFile=new File([blob],'note-vocale.webm',{type:blob.type});recordedVoiceNote=true;$('post-audio').value='';$('upload-preview').textContent='Note vocale enregistrée · '+(blob.size/1024/1024).toFixed(2)+' Mo';$('voice-note-status').textContent='Note vocale prête à publier.'}button.disabled=false;button.textContent='● Enregistrer une note vocale';voiceRecorder=null};voiceRecorder.start();button.textContent='■ Arrêter l’enregistrement';$('voice-note-status').textContent='Enregistrement en cours…'}catch(err){stream?.getTracks().forEach(t=>t.stop());if(err?.name==='NotAllowedError'||!navigator.mediaDevices?.getUserMedia){chooseAudioFallback(f=>{recordedAudioFile=f;recordedVoiceNote=true;$('post-audio').value='';$('upload-preview').textContent='Audio choisi · '+f.name;$('voice-note-status').textContent='Audio prêt à publier.'},$('voice-note-status'))}else notify(microphoneAccessError(err))}}
   function setupAudio(){document.addEventListener('click',async e=>{const play=e.target.closest('[data-play]');if(play){e.preventDefault();toggleAudio(play.dataset.play);return}const wave=e.target.closest('[data-wave]');if(wave&&activeAudio){const rect=wave.getBoundingClientRect();activeAudio.currentTime=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width))*activeAudio.duration}})}
