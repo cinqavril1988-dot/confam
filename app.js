@@ -124,6 +124,9 @@ document.addEventListener('submit',e=>{const fc=e.target.closest('[data-focommen
     const installButton=$('install-app-button');
     if(!installButton)return;
     const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+    const syncInstallButton=()=>installButton.classList.toggle('pwa-install-hidden',isStandalone());
+    syncInstallButton();
+    window.matchMedia('(display-mode: standalone)').addEventListener?.('change',syncInstallButton);
     installButton.addEventListener('click',async()=>{
       if(isStandalone()){notify('CONFAM est déjà installé sur cet appareil.');return}
       if(deferredInstallPrompt){
@@ -148,6 +151,7 @@ document.addEventListener('submit',e=>{const fc=e.target.closest('[data-focommen
     });
     window.addEventListener('appinstalled',()=>{
       deferredInstallPrompt=null;
+      syncInstallButton();
       notify('CONFAM a été installé sur ton appareil.');
     });
     if('serviceWorker'in navigator && location.protocol.startsWith('http')){
