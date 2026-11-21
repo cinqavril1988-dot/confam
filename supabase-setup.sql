@@ -166,7 +166,7 @@ drop policy if exists "CONFAM comments are readable" on public.confam_comments;
 create policy "CONFAM comments are readable" on public.confam_comments for select to anon,authenticated using(true);
 drop policy if exists "CONFAM users create own comments" on public.confam_comments;
 drop policy if exists "CONFAM users create own comments" on public.confam_comments;
-create policy "CONFAM users create own comments" on public.confam_comments for insert to authenticated with check(auth.uid()=user_id and (parent_comment_id is null or exists(select 1 from public.confam_comments parent where parent.id=parent_comment_id and parent.post_id=post_id)));
+create policy "CONFAM users create own comments" on public.confam_comments for insert to authenticated with check(auth.uid()=user_id);
 drop policy if exists "CONFAM users delete own comments" on public.confam_comments;
 create policy "CONFAM users delete own comments" on public.confam_comments for delete to authenticated using(auth.uid()=user_id);
 
@@ -178,6 +178,11 @@ drop policy if exists "CONFAM users like comments as themselves" on public.confa
 create policy "CONFAM users like comments as themselves" on public.confam_comment_likes for insert to authenticated with check(auth.uid()=user_id);
 drop policy if exists "CONFAM users unlike own comment likes" on public.confam_comment_likes;
 create policy "CONFAM users unlike own comment likes" on public.confam_comment_likes for delete to authenticated using(auth.uid()=user_id);
+-- Autorisations SQL explicites : les règles RLS restent le contrôle de sécurité.
+grant select on public.confam_comments to anon, authenticated;
+grant insert, delete on public.confam_comments to authenticated;
+grant select on public.confam_comment_likes to anon, authenticated;
+grant insert, delete on public.confam_comment_likes to authenticated;
 -- Abonnements.
 drop policy if exists "CONFAM follows are readable" on public.confam_follows;
 create policy "CONFAM follows are readable" on public.confam_follows for select to anon,authenticated using(true);
