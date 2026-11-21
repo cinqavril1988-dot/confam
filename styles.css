@@ -767,14 +767,14 @@ html{
 }
 
 
-/* ALIGNEMENT — commandes d'ajout et micro au bord gauche du compositeur */
+/* ALIGNEMENT — commandes sous l'avatar, avec le même retrait intérieur */
 #inline-composer-wrap .composer-action-row{
-  left:3px!important;
-  padding-left:0!important;
+  left:9px!important;
+  padding-left:30px!important;
 }
 @media(max-width:560px){
   #inline-composer-wrap .composer-action-row{
-    left:3px!important;
-    padding-left:0!important;
+    left:8px!important;
+    padding-left:28px!important;
   }
 }
