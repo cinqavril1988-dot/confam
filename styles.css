@@ -778,3 +778,38 @@ html{
     padding-left:0!important;
   }
 }
+
+/* Audio CONFAM — player compact, bouton play moderne */
+.audio-player{
+  gap:9px!important;
+  padding:9px 10px!important;
+  margin:9px 0!important;
+  border-radius:12px!important;
+}
+.audio-player .play-button{
+  width:32px!important;height:32px!important;
+  min-width:32px!important;
+  border-radius:11px!important;
+  display:grid!important;place-items:center!important;
+  background:linear-gradient(135deg,#9b5cff,#e74cb4)!important;
+  box-shadow:0 3px 12px #a34cff35!important;
+  color:#fff!important;
+  font-size:0!important;
+  position:relative!important;
+}
+.audio-player .play-button::before{
+  content:""!important;
+  width:0!important;height:0!important;
+  border-top:6px solid transparent!important;
+  border-bottom:6px solid transparent!important;
+  border-left:9px solid #fff!important;
+  margin-left:2px!important;
+}
+.audio-player .audio-title{font-size:10px!important;margin-bottom:4px!important}
+.audio-player .waveform{height:25px!important;gap:1.5px!important}
+.audio-player .audio-meta{font-size:8px!important;margin-top:3px!important}
+@media(max-width:560px){
+  .audio-player{gap:8px!important;padding:8px!important;margin:8px 0!important}
+  .audio-player .play-button{width:30px!important;height:30px!important;min-width:30px!important;border-radius:10px!important}
+  .audio-player .waveform{height:22px!important}
+}
