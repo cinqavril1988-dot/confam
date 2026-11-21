@@ -687,3 +687,18 @@ html{
   #inline-composer-wrap #post-message,
   #inline-composer-wrap .beat-options{margin-left:34px!important}
 }
+
+
+/* CONFAM — commandes rapprochees des bords du compositeur */
+#inline-composer-wrap{
+  padding-left:7px!important;
+  padding-right:7px!important;
+}
+#inline-composer-wrap .composer-action-row{
+  padding-left:0!important;
+  padding-right:0!important;
+}
+@media(max-width:560px){
+  #inline-composer-wrap{padding-left:6px!important;padding-right:6px!important}
+  #inline-composer-wrap .composer-action-row{padding-left:0!important;padding-right:0!important}
+}
