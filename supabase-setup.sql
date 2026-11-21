@@ -1,3 +1,6 @@
+-- Likes de commentaires et réponses imbriquées dans confam_comments.
+alter table public.confam_comments add column if not exists parent_comment_id uuid references public.confam_comments(id) on delete cascade;
+create table if not exists public.confam_comment_likes (comment_id uuid not null references public.confam_comments(id) on delete cascade,user_id uuid not null references public.confam_profiles(id) on delete cascade,created_at timestamptz not null default now(),primary key(comment_id,user_id));
 -- CONFAM — Base de données Supabase
 -- Script autonome : crée uniquement des objets préfixés confam_ et ne supprime aucune donnée existante.
 -- À exécuter une seule fois dans Supabase > SQL Editor.
@@ -161,10 +164,19 @@ create policy "CONFAM users remove own likes" on public.confam_likes for delete 
 drop policy if exists "CONFAM comments are readable" on public.confam_comments;
 create policy "CONFAM comments are readable" on public.confam_comments for select to anon,authenticated using(true);
 drop policy if exists "CONFAM users create own comments" on public.confam_comments;
-create policy "CONFAM users create own comments" on public.confam_comments for insert to authenticated with check(auth.uid()=user_id);
+drop policy if exists "CONFAM users create own comments" on public.confam_comments;
+create policy "CONFAM users create own comments" on public.confam_comments for insert to authenticated with check(auth.uid()=user_id and (parent_comment_id is null or exists(select 1 from public.confam_comments parent where parent.id=parent_comment_id and parent.post_id=post_id)));
 drop policy if exists "CONFAM users delete own comments" on public.confam_comments;
 create policy "CONFAM users delete own comments" on public.confam_comments for delete to authenticated using(auth.uid()=user_id);
 
+-- Likes de commentaires
+alter table public.confam_comment_likes enable row level security;
+drop policy if exists "CONFAM comment likes readable" on public.confam_comment_likes;
+create policy "CONFAM comment likes readable" on public.confam_comment_likes for select to anon,authenticated using(true);
+drop policy if exists "CONFAM users like comments as themselves" on public.confam_comment_likes;
+create policy "CONFAM users like comments as themselves" on public.confam_comment_likes for insert to authenticated with check(auth.uid()=user_id);
+drop policy if exists "CONFAM users unlike own comment likes" on public.confam_comment_likes;
+create policy "CONFAM users unlike own comment likes" on public.confam_comment_likes for delete to authenticated using(auth.uid()=user_id);
 -- Abonnements.
 drop policy if exists "CONFAM follows are readable" on public.confam_follows;
 create policy "CONFAM follows are readable" on public.confam_follows for select to anon,authenticated using(true);
