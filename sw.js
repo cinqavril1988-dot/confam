@@ -1,4 +1,4 @@
-const CACHE='confam-shell-v15';
+const CACHE='confam-shell-v16';
 const CORE=['/','/index.html','/styles.css','/app.js','/config.js','/manifest.webmanifest','/favicon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>true)));
 self.addEventListener('message',e=>{if(e.data&&e.data.type==='SKIP_WAITING')self.skipWaiting()});
