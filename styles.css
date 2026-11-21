@@ -42,3 +42,25 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
 .auth-open{overflow:hidden}
 @media(max-width:700px){.auth-view{padding:12px}.auth-dialog{padding:30px 20px;max-height:94vh;border-radius:18px}.role-options{gap:8px}.role-choice{padding:14px 10px;min-height:145px}}
 .role-hidden{display:none!important}
+
+/* Face-Off community */
+.faceoff-card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:15px}
+.faceoff-top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.faceoff-status{font-size:10px;color:#ffc18e;background:#ff6a2418;border:1px solid #854124;border-radius:20px;padding:6px 10px}
+.faceoff-card h2{font:700 20px 'Space Grotesk';margin:16px 0 5px}
+.faceoff-description{color:var(--muted);font-size:12px;line-height:1.5}
+.faceoff-versus{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;background:#100b0a;border:1px solid var(--line);border-radius:14px;padding:16px;margin:16px 0}
+.faceoff-versus>strong{font:800 18px 'Space Grotesk';color:#ff7544}
+.faceoff-contestant{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.faceoff-avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ff9b32,#ed3d48);font-weight:800;font-size:17px}
+.faceoff-contestant b{font-size:12px;overflow-wrap:anywhere}
+.faceoff-contestant small{font-size:10px;color:var(--muted)}
+.faceoff-contestant audio{width:100%;max-width:210px;height:32px}
+.faceoff-actions,.faceoff-reactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0}
+.faceoff-actions .primary-button,.faceoff-actions .outline-button{padding:9px 12px;font-size:11px}
+.faceoff-actions .selected,.faceoff-reactions button.selected{border-color:#ff7945;background:#512719;color:#ffd0ae}
+.faceoff-social{border-top:1px solid var(--line);margin-top:13px;padding-top:8px}
+.faceoff-reactions button{border:1px solid #4a3028;border-radius:20px;background:#211410;color:#f3c2a9;padding:7px 11px;font-size:11px}
+.faceoff-reactions span{font-size:10px;color:var(--muted)}
+.faceoff-comments{max-height:180px;overflow:auto}
+@media(max-width:600px){.faceoff-card{padding:13px}.faceoff-versus{padding:11px 6px;gap:5px}.faceoff-card h2{font-size:17px}.faceoff-status{font-size:9px}.faceoff-contestant audio{width:100%;max-width:130px}}
