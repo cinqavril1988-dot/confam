@@ -767,14 +767,14 @@ html{
 }
 
 
-/* ALIGNEMENT — commandes sous l'avatar, avec le même retrait intérieur */
+/* ALIGNEMENT — même distance bord gauche / avatar / icônes */
 #inline-composer-wrap .composer-action-row{
   left:9px!important;
-  padding-left:30px!important;
+  padding-left:0!important;
 }
 @media(max-width:560px){
   #inline-composer-wrap .composer-action-row{
     left:8px!important;
-    padding-left:28px!important;
+    padding-left:0!important;
   }
 }
