@@ -385,3 +385,19 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
 @media(max-width:600px){
   #page-faceoff > .empty-state{padding:18px 12px!important;margin:8px 0 14px}
 }
+
+
+/* CONFAM — panneau « Le ring est prêt » encore plus discret */
+#page-faceoff > .empty-state{
+  max-width:460px;
+  padding:14px 12px!important;
+  margin:8px auto 12px;
+  border-radius:12px!important;
+}
+#page-faceoff > .empty-state .empty-icon{font-size:22px!important}
+#page-faceoff > .empty-state h2{font-size:14px!important;margin:5px 0 3px!important}
+#page-faceoff > .empty-state p{font-size:10px!important;line-height:1.35;margin:0 auto 8px!important}
+#page-faceoff > .empty-state #faceoff-create{padding:6px 11px!important;font-size:10px!important}
+@media(max-width:600px){
+  #page-faceoff > .empty-state{max-width:none;padding:12px 10px!important;margin:6px 0 10px}
+}
