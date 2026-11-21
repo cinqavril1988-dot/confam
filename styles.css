@@ -401,3 +401,45 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
 @media(max-width:600px){
   #page-faceoff > .empty-state{max-width:none;padding:12px 10px!important;margin:6px 0 10px}
 }
+
+
+/* CONFAM PWA — installation et mise à jour */
+.pwa-install-button{
+  flex:0 0 auto;
+  border:1px solid #9b603d;
+  border-radius:999px;
+  padding:9px 13px;
+  background:linear-gradient(135deg,#512416,#2b1712);
+  color:#ffd1b0;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.pwa-install-button:hover{border-color:#ff9b57;background:#6b2d19}
+#pwa-update-banner{
+  position:relative;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:10px 18px;
+  padding:12px 14px;
+  border:1px solid #8c512d;
+  border-radius:13px;
+  background:linear-gradient(110deg,#382016,#21130f);
+  color:#fff1e7;
+  box-shadow:0 8px 25px #0005;
+}
+#pwa-update-banner span{display:flex;flex-direction:column;gap:3px;min-width:0}
+#pwa-update-banner b{font-size:12px}
+#pwa-update-banner small{font-size:10px;color:#d8b8a5}
+#pwa-update-now{border:0;border-radius:999px;background:#ff8747;color:#24110b;padding:9px 13px;font-size:11px;font-weight:900;white-space:nowrap}
+#pwa-update-close{border:0;background:transparent;color:#e9c8b8;font-size:20px;padding:2px 5px}
+@media(max-width:700px){
+  .pwa-install-button{padding:8px 9px;font-size:10px}
+  #pwa-update-banner{margin:8px 10px;padding:10px;gap:8px}
+  #pwa-update-banner small{max-width:190px;line-height:1.35}
+  #pwa-update-now{padding:8px 10px;font-size:10px}
+}
