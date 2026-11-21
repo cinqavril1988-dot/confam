@@ -104,7 +104,74 @@
   document.addEventListener('click',async e=>{if(!e.target.closest('.comment-list')&&!e.target.closest('[data-comment-focus]'))document.querySelectorAll('.comment-composer').forEach(c=>c.classList.add('hidden'));const emojiToggle=e.target.closest('[data-emoji-toggle]');if(emojiToggle){const form=document.querySelector(`[data-comment-form="${emojiToggle.dataset.emojiToggle}"]`);form?.querySelector('.emoji-picker')?.classList.toggle('hidden');return}const emoji=e.target.closest('.emoji-picker button');if(emoji){const picker=emoji.closest('.emoji-picker'),form=picker.closest('form'),input=form.querySelector('input[name="comment"]');input.value+=emoji.textContent;picker.classList.add('hidden');input.focus();return}const rec=e.target.closest('[data-comment-record]');if(rec){const postId=rec.dataset.commentRecord,form=document.querySelector(`[data-comment-form="${postId}"]`),status=form.querySelector(`[data-record-status="${postId}"]`);if(commentRecorder&&commentRecorder.state==='recording'&&commentRecordingPost===postId){commentRecorder.stop();rec.disabled=true;status.textContent='Finalisation…';return}if(commentRecorder&&commentRecorder.state==='recording'){notify('Termine d’abord l’enregistrement en cours.');return}if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){notify('Microphone non pris en charge par ce navigateur.');return}try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});commentChunks=[];commentAudioBlob=null;commentRecordingPost=postId;const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'';commentRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);commentRecorder.ondataavailable=ev=>{if(ev.data&&ev.data.size)commentChunks.push(ev.data)};commentRecorder.onstop=()=>{stream.getTracks().forEach(t=>t.stop());commentAudioBlob=new Blob(commentChunks,{type:commentRecorder.mimeType||'audio/webm'});rec.disabled=false;status.textContent=commentAudioBlob.size?'✓ Note vocale prête':'Aucun audio capté';rec.textContent='🎙️ Recommencer';notify('Enregistrement vocal terminé.')} ;commentRecorder.start();status.textContent='● Enregistrement…';rec.textContent='■ Arrêter';}catch(err){notify('Microphone inaccessible : '+err.message)}return}});
 document.addEventListener('submit',e=>{const fc=e.target.closest('[data-focomment-form]');if(fc){commentFaceoff(e,fc.dataset.focommentForm);return}const rf=e.target.closest('[data-reply-form]');if(rf){addReply(e,rf.dataset.replyForm);return}const fr=e.target.closest('[data-fo-reply-form]');if(fr){replyFaceoffComment(e,fr.dataset.foReplyForm);return}const cf=e.target.closest('[data-comment-form]');if(cf){addComment(e,cf.dataset.commentForm);return}});
   $('auth-form').addEventListener('submit',authSubmit);$('role-back').addEventListener('click',()=>{signupStep=1;$('auth-email').required=true;$('auth-password').required=true;$('role-step').classList.add('hidden');$('auth-fields').classList.remove('hidden');$('auth-submit').classList.remove('hidden');$('auth-title').textContent='Rejoins la Fam.';$('auth-subtitle').textContent='Commence par tes informations de connexion.'});$('post-form').addEventListener('submit',publishPost);$('voice-record-button')?.addEventListener('click',toggleVoiceRecording);$('post-audio').addEventListener('change',e=>{recordedAudioFile=null;recordedVoiceNote=false;$('upload-preview').textContent=e.target.files[0]?.name||'';$('voice-note-status').textContent=''});$('post-image').addEventListener('change',e=>$('upload-preview').textContent=[ $('post-audio').files[0]?.name,e.target.files[0]?.name].filter(Boolean).join(' · '));$('global-search').addEventListener('input',e=>search(e.target.value.trim()));$('top-account').addEventListener('click',()=>user?showPage('profile'):openAuth('login'));$('sidebar-account').addEventListener('click',()=>user?showPage('profile'):openAuth('login'));$('edit-profile').addEventListener('click',()=>{if(!profile)return;$('profile-name').value=profile.display_name||'';$('profile-username').value=profile.username||'';$('profile-bio').value=profile.bio||'';$('profile-role').value=profile.role||'music_lover';$('profile-avatar').value='';$('profile-avatar-preview').innerHTML=avatar(profile,'profile-photo');$('profile-message').textContent='';$('profile-modal').classList.remove('hidden')});$('profile-avatar').addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){$('profile-message').textContent='Choisis un fichier image.';return}const url=URL.createObjectURL(file);$('profile-avatar-preview').innerHTML='<img class="profile-photo-preview" src="'+url+'" alt="Aperçu de la photo">'});$('profile-form').addEventListener('submit',async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;$('profile-message').textContent='Enregistrement…';try{let avatarUrl=profile?.avatar_url||null;const photo=$('profile-avatar').files[0];if(photo){if(photo.size>10*1024*1024)throw new Error('La photo doit faire 10 Mo maximum.');if(!['image/jpeg','image/png','image/webp','image/gif'].includes(photo.type))throw new Error('Format accepté : JPG, PNG, WEBP ou GIF.');const uploaded=await uploadFile(photo,'confam-images');avatarUrl=uploaded.url}const updates={display_name:$('profile-name').value.trim(),username:$('profile-username').value.trim().toLowerCase(),bio:$('profile-bio').value.trim(),role:$('profile-role').value,avatar_url:avatarUrl};const {data,error}=await db.from('confam_profiles').update(updates).eq('id',user.id).select().single();if(error)throw error;profile=data;updateAccount();$('profile-modal').classList.add('hidden');await loadProfilePage();notify('Profil mis à jour.')}catch(err){$('profile-message').textContent=err.message||'Impossible de mettre à jour le profil.'}finally{btn.disabled=false}});$('faceoff-create').addEventListener('click',openFaceoffCreator);
+
+  // Installation PWA et actualisation contrôlée
+  let deferredInstallPrompt=null, pwaRegistration=null, updateReloading=false;
+  function showPwaUpdate(){
+    if(document.getElementById('pwa-update-banner'))return;
+    const banner=document.createElement('div');
+    banner.id='pwa-update-banner';
+    banner.innerHTML='<span><b>Nouvelle version disponible</b><small>Actualise CONFAM pour profiter des nouveautés.</small></span><button type="button" id="pwa-update-now">Actualiser</button><button type="button" id="pwa-update-close" aria-label="Fermer">×</button>';
+    document.querySelector('.main-area')?.prepend(banner);
+    document.getElementById('pwa-update-now')?.addEventListener('click',()=>{
+      const waiting=pwaRegistration?.waiting;
+      if(waiting)waiting.postMessage({type:'SKIP_WAITING'});
+      else window.location.reload();
+    });
+    document.getElementById('pwa-update-close')?.addEventListener('click',()=>banner.remove());
+  }
+  function setupPwa(){
+    const installButton=$('install-app-button');
+    if(!installButton)return;
+    const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+    installButton.addEventListener('click',async()=>{
+      if(isStandalone()){notify('CONFAM est déjà installé sur cet appareil.');return}
+      if(deferredInstallPrompt){
+        deferredInstallPrompt.prompt();
+        const choice=await deferredInstallPrompt.userChoice;
+        if(choice?.outcome==='accepted')notify('Installation de CONFAM acceptée.');
+        deferredInstallPrompt=null;
+        installButton.textContent='Installer CONFAM';
+        return;
+      }
+      const ua=navigator.userAgent||'';
+      if(/iphone|ipad|ipod/i.test(ua)){
+        alert('Pour installer CONFAM sur iPhone ou iPad :\n1. Ouvre ce site dans Safari.\n2. Appuie sur le bouton Partager.\n3. Choisis « Sur l’écran d’accueil ».\n4. Appuie sur Ajouter.');
+      }else{
+        alert('Pour installer CONFAM : ouvre le menu de ton navigateur (⋮ ou …), puis choisis « Installer CONFAM » ou « Installer l’application ».');
+      }
+    });
+    window.addEventListener('beforeinstallprompt',event=>{
+      event.preventDefault();
+      deferredInstallPrompt=event;
+      installButton.classList.remove('pwa-install-hidden');
+    });
+    window.addEventListener('appinstalled',()=>{
+      deferredInstallPrompt=null;
+      notify('CONFAM a été installé sur ton appareil.');
+    });
+    if('serviceWorker'in navigator && location.protocol.startsWith('http')){
+      navigator.serviceWorker.register('/sw.js').then(reg=>{
+        pwaRegistration=reg;
+        if(reg.waiting && navigator.serviceWorker.controller)showPwaUpdate();
+        reg.addEventListener('updatefound',()=>{
+          const worker=reg.installing;
+          if(!worker)return;
+          worker.addEventListener('statechange',()=>{
+            if(worker.state==='installed'&&navigator.serviceWorker.controller)showPwaUpdate();
+          });
+        });
+        reg.update().catch(()=>{});
+      }).catch(err=>console.warn('PWA service worker:',err));
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(updateReloading)return;
+        updateReloading=true;
+        window.location.reload();
+      });
+    }
+  }
+
   setupAudio();
-  async function init(){if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('/sw.js').catch(()=>{});const requestedPage=new URLSearchParams(location.search).get('page');const initialPage=validPages.has(requestedPage)?requestedPage:'feed';if(!db){closeAuth();await loadFeed();showPage('feed');document.body.classList.remove('app-booting');return}const {data:{session}}=await db.auth.getSession();if(session){user=session.user;await loadProfile();closeAuth();await loadFeed();showPage(initialPage)}else{closeAuth();await loadFeed();showPage('feed')}document.body.classList.remove('app-booting');db.auth.onAuthStateChange(async(_event,session)=>{user=session?.user||null;if(user){await loadProfile();closeAuth();await loadFeed();const target=validPages.has(new URLSearchParams(location.search).get('page'))?new URLSearchParams(location.search).get('page'):'feed';showPage(target)}else{profile=null;updateAccount();closeAuth();await loadFeed();showPage('feed')}})}
+  async function init(){setupPwa();const requestedPage=new URLSearchParams(location.search).get('page');const initialPage=validPages.has(requestedPage)?requestedPage:'feed';if(!db){closeAuth();await loadFeed();showPage('feed');document.body.classList.remove('app-booting');return}const {data:{session}}=await db.auth.getSession();if(session){user=session.user;await loadProfile();closeAuth();await loadFeed();showPage(initialPage)}else{closeAuth();await loadFeed();showPage('feed')}document.body.classList.remove('app-booting');db.auth.onAuthStateChange(async(_event,session)=>{user=session?.user||null;if(user){await loadProfile();closeAuth();await loadFeed();const target=validPages.has(new URLSearchParams(location.search).get('page'))?new URLSearchParams(location.search).get('page'):'feed';showPage(target)}else{profile=null;updateAccount();closeAuth();await loadFeed();showPage('feed')}})}
   init();
 })();
