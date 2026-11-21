@@ -25,29 +25,105 @@
   async function toggleCommentLike(commentId,button){if(!user){openAuth('login');return}const {data:existing,error:checkError}=await db.from('confam_comment_likes').select('comment_id').eq('comment_id',commentId).eq('user_id',user.id).maybeSingle();if(checkError){notify('J’aime du commentaire indisponible : '+checkError.message);return}if(existing){const {error}=await db.from('confam_comment_likes').delete().eq('comment_id',commentId).eq('user_id',user.id);if(error){notify('Impossible de retirer le J’aime : '+error.message);return}button.classList.remove('liked')}else{const {error}=await db.from('confam_comment_likes').insert({comment_id:commentId,user_id:user.id});if(error){notify('Impossible d’ajouter le J’aime : '+error.message);return}button.classList.add('liked')}const {count,error}=await db.from('confam_comment_likes').select('comment_id',{count:'exact',head:true}).eq('comment_id',commentId);if(error){notify('Comptage indisponible : '+error.message);return}const n=button.querySelector('[data-comment-like-count]');if(n)n.textContent=count||0}
   async function addReply(e,parentId){e.preventDefault();if(!user){openAuth('login');return}const form=e.target,content=form.elements.reply?.value?.trim();if(!content)return;const postCard=form.closest('[data-post-card]'),postId=postCard?.dataset.postCard;if(!postId){notify('Publication introuvable.');return}const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await db.from('confam_comments').insert({post_id:postId,user_id:user.id,parent_comment_id:parentId,content});if(error){notify('Réponse non envoyée : '+error.message);if(btn)btn.disabled=false;return}if(postCard){const commentBox=postCard.querySelector('[data-comments]');const {data,error:loadError}=await db.from('confam_comments').select('*,author:confam_profiles!confam_comments_user_id_fkey(display_name,username,avatar_url)').eq('post_id',postId).order('created_at',{ascending:true});if(loadError){notify('Réponse envoyée, mais affichage impossible : '+loadError.message);return}if(commentBox)await renderCommentTree(commentBox,postId,data||[])}if(btn)btn.disabled=false}
   function postHTML(p){const a=p.author||{},audio=p.audio_url?`<div class="audio-player" data-audio-player="${esc(p.id)}"><button class="play-button" data-play="${esc(p.id)}" aria-label="Lire">▶</button><div class="audio-main"><div class="audio-title">♫ ${esc(p.audio_name||'Message audio')}</div><div class="waveform" data-wave="${esc(p.id)}" role="slider" aria-label="Progression audio">${Array.from({length:56},(_,i)=>`<span style="--h:${14+((i*17+p.id.length*11)%22)}px"></span>`).join('')}</div><div class="audio-meta"><span data-time="${esc(p.id)}">0:00</span><span data-duration="${esc(p.id)}">--:--</span></div></div></div>`:'';return `<article class="post-card" data-post-card="${esc(p.id)}"><div class="post-head">${avatar(a)}<div class="post-identity"><b>${esc(a.display_name||'Membre CONFAM')} ${a.role==='artist'?'<span style="color:#c18aff">✦ Artist</span>':''}</b><small>${esc(handle(a))} · ${timeAgo(p.created_at)} ${p.audio_url?'· Publication audio':''}</small></div><button class="post-more" data-post-menu="${esc(p.id)}" aria-label="Options">···</button></div>${p.content?`<div class="post-content">${esc(p.content)}</div>`:''}${p.image_url?`<img class="post-image" src="${esc(p.image_url)}" alt="Image de publication" loading="lazy">`:''}${audio}<div class="post-actions"><button class="action-button" data-like="${esc(p.id)}">♡ J’aime <span class="action-count" data-like-count="${esc(p.id)}">0</span></button><button class="action-button" data-comment-focus="${esc(p.id)}">Commenter <span class="action-count" data-comment-count="${esc(p.id)}">0</span></button><button class="action-button post-share-button" data-share="${esc(p.id)}"><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"></path></svg>Partager</button></div>${a.role==='artist'&&a.id!==user?.id?'<div class="post-duel-request"><button type="button" class="post-duel-button" data-request-post-duel="'+esc(p.id)+'" data-post-artist="'+esc(a.id)+'" data-post-artist-name="'+esc(a.display_name||'Artiste')+'">⚡ Demander ce post en Duel</button></div>':''}<div class="comment-list"><div data-comments="${esc(p.id)}"></div><form class="comment-form" data-comment-form="${esc(p.id)}"><div class="comment-composer hidden"><div class="comment-tools"><button type="button" data-emoji-toggle="${esc(p.id)}">😊</button><button type="button" data-comment-record="${esc(p.id)}">🎙️ Enregistrer</button><span data-record-status="${esc(p.id)}"></span></div><div class="emoji-picker hidden" data-emoji-picker="${esc(p.id)}"><button type="button">😀</button><button type="button">😂</button><button type="button">❤️</button><button type="button">🔥</button><button type="button">👏</button><button type="button">😍</button><button type="button">🙏</button><button type="button">🎵</button></div><input name="comment" placeholder="Écrire un commentaire…" maxlength="500"><button type="submit">Envoyer</button></div></form></div></article>`}
+  let postDuelRecorder=null,postDuelChunks=[],postDuelRecordedFile=null,postDuelStream=null;
   async function openPostDuelRequest(postId,artistId,artistName){
     if(!user){openAuth('login');return}
     if(artistId===user.id){notify('Tu ne peux pas demander un duel contre ta propre publication.');return}
     let modal=$('post-duel-modal');
-    if(!modal){document.body.insertAdjacentHTML('beforeend',`
-    <div id="post-duel-modal" class="modal hidden"><div class="modal-backdrop" data-close="post-duel"></div><div class="modal-card"><div class="modal-head"><h2>⚡ Demander ce post en Duel</h2><button class="close-button" data-close="post-duel">×</button></div><form id="post-duel-form"><p class="muted">Publication proposée par <b id="post-duel-target"></b>.</p><label>Artiste qui relève le défi<select name="challenger" id="post-duel-challenger" required></select></label><label>Thème du Duel<input name="title" maxlength="100" required placeholder="Ex. : Qui maîtrise le mieux ce style ?"></label><label>Message (facultatif)<textarea name="description" rows="2" maxlength="500" placeholder="Présente ton défi…"></textarea></label><div class="modal-actions"><span id="post-duel-message" class="form-message"></span><button class="primary-button" type="submit">Envoyer la demande →</button></div></form></div></div>`);
+    if(!modal){
+      document.body.insertAdjacentHTML('beforeend',`
+      <div id="post-duel-modal" class="modal hidden"><div class="modal-backdrop" data-close="post-duel"></div><div class="modal-card"><div class="modal-head"><h2>⚡ Mettre cette publication en Duel</h2><button class="close-button" data-close="post-duel">×</button></div>
+      <form id="post-duel-form">
+        <p class="muted">Publication de <b id="post-duel-target"></b> · elle sera le concurrent A.</p>
+        <div id="post-duel-artist-fields" class="hidden">
+          <label>Ton son pour le Duel<input id="post-duel-audio" type="file" accept="audio/*"></label>
+          <p class="muted">Ou enregistre directement ta note vocale :</p>
+          <button type="button" class="outline-button" id="post-duel-record">● Enregistrer une note vocale</button>
+          <p id="post-duel-record-status" class="muted"></p>
+          <p id="post-duel-file-name" class="muted"></p>
+        </div>
+        <div id="post-duel-fan-fields" class="hidden">
+          <label>Choisis l’artiste qui sera le concurrent B<select id="post-duel-challenger" required></select></label>
+          <label>Publication audio de cet artiste (facultatif)<select id="post-duel-challenger-post"><option value="">Aucun son sélectionné</option></select></label>
+        </div>
+        <label>Thème du Duel<input id="post-duel-title" maxlength="100" required placeholder="Ex. : Qui maîtrise le mieux ce style ?"></label>
+        <label>Message (facultatif)<textarea id="post-duel-description" rows="2" maxlength="500" placeholder="Présente le défi…"></textarea></label>
+        <div class="modal-actions"><span id="post-duel-message" class="form-message"></span><button class="primary-button" id="post-duel-submit" type="submit">Lancer le Duel →</button></div>
+      </form></div></div>`);
       modal=$('post-duel-modal');
-      $('post-duel-form').addEventListener('submit',async e=>{e.preventDefault();const form=e.target,btn=e.submitter,challenger=form.elements.challenger.value,target=form.dataset.target,post=form.dataset.post;btn.disabled=true;btn.textContent='Envoi…';$('post-duel-message').textContent='';const {error}=await db.rpc('confam_create_faceoff',{p_title:form.elements.title.value.trim(),p_description:form.elements.description.value.trim(),p_artist_a_id:challenger,p_artist_b_id:target,p_post_a_id:null,p_post_b_id:post,p_ends_at:null});btn.disabled=false;btn.textContent='Envoyer la demande →';if(error){$('post-duel-message').textContent=error.message;return}modal.classList.add('hidden');notify('Demande de Duel envoyée aux artistes.');await loadFaceoffs()});
+      $('post-duel-challenger').addEventListener('change',loadPostDuelChallengerPosts);
+      $('post-duel-audio').addEventListener('change',e=>{postDuelRecordedFile=null;$('post-duel-file-name').textContent=e.target.files[0]?.name||''});
+      $('post-duel-record').addEventListener('click',togglePostDuelRecording);
+      $('post-duel-form').addEventListener('submit',submitPostDuel);
     }
+    if(postDuelRecorder&&postDuelRecorder.state==='recording'){postDuelRecorder.stop()}
+    postDuelRecordedFile=null;$('post-duel-audio').value='';$('post-duel-file-name').textContent='';$('post-duel-record-status').textContent='';$('post-duel-record').textContent='● Enregistrer une note vocale';
     $('post-duel-target').textContent=artistName;
     $('post-duel-message').textContent='';
-    const {data,error}=await db.from('confam_profiles').select('id,display_name,username').eq('role','artist').neq('id',artistId).order('display_name');
-    if(error){notify('Impossible de charger les artistes : '+error.message);return}
-    const select=$('post-duel-challenger');
-    const choices=(data||[]).map(a=>'<option value="'+esc(a.id)+'">'+esc(a.display_name||'Artiste')+' ('+esc(handle(a))+')</option>').join('');
-    select.innerHTML=choices;
-    if(profile?.role==='artist'){
-      select.innerHTML='<option value="'+esc(user.id)+'">'+esc(profile.display_name||'Moi')+' (moi)</option>';
-      select.disabled=true;
-    }else{select.disabled=false;select.insertAdjacentHTML('afterbegin','<option value="">Choisir un artiste…</option>');select.value=''}
-    if(!select.options.length||!select.value&&profile?.role!=='artist'){$('post-duel-message').textContent='Aucun artiste disponible pour relever ce défi.'}
     const form=$('post-duel-form');form.dataset.target=artistId;form.dataset.post=postId;
+    $('post-duel-artist-fields').classList.toggle('hidden',profile?.role!=='artist');
+    $('post-duel-fan-fields').classList.toggle('hidden',profile?.role==='artist');
+    if(profile?.role==='music_lover'||profile?.role!=='artist'){
+      const {data,error}=await db.from('confam_profiles').select('id,display_name,username').eq('role','artist').neq('id',artistId).order('display_name');
+      if(error){notify('Impossible de charger les artistes : '+error.message);return}
+      const select=$('post-duel-challenger');
+      select.innerHTML='<option value="">Choisir un artiste…</option>'+(data||[]).map(a=>'<option value="'+esc(a.id)+'">'+esc(a.display_name||'Artiste')+' ('+esc(handle(a))+')</option>').join('');
+      $('post-duel-challenger-post').innerHTML='<option value="">Aucun son sélectionné</option>';
+    }
     $('post-duel-modal').classList.remove('hidden');
+  }
+  async function loadPostDuelChallengerPosts(){
+    const artistId=$('post-duel-challenger').value,select=$('post-duel-challenger-post');
+    select.innerHTML='<option value="">Aucun son sélectionné</option>';
+    if(!artistId)return;
+    const {data,error}=await db.from('confam_posts').select('id,audio_name,created_at').eq('user_id',artistId).not('audio_url','is',null).order('created_at',{ascending:false}).limit(30);
+    if(error){$('post-duel-message').textContent='Impossible de charger les sons : '+error.message;return}
+    (data||[]).forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.audio_name||'Publication audio';select.appendChild(o)});
+  }
+  async function togglePostDuelRecording(){
+    const button=$('post-duel-record');
+    if(postDuelRecorder&&postDuelRecorder.state==='recording'){postDuelRecorder.stop();button.disabled=true;button.textContent='Préparation…';return}
+    if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$('post-duel-record-status').textContent='Enregistrement vocal non pris en charge par ce navigateur.';return}
+    try{
+      postDuelStream=await navigator.mediaDevices.getUserMedia({audio:true});postDuelChunks=[];
+      const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'';
+      postDuelRecorder=new MediaRecorder(postDuelStream,mime?{mimeType:mime}:undefined);
+      postDuelRecorder.ondataavailable=e=>{if(e.data&&e.data.size)postDuelChunks.push(e.data)};
+      postDuelRecorder.onstop=()=>{
+        postDuelStream?.getTracks().forEach(t=>t.stop());postDuelStream=null;
+        const blob=new Blob(postDuelChunks,{type:postDuelRecorder?.mimeType||'audio/webm'});
+        if(blob.size){postDuelRecordedFile=new File([blob],'duel-note-vocale.webm',{type:blob.type});$('post-duel-audio').value='';$('post-duel-file-name').textContent='Note vocale prête · '+(blob.size/1024/1024).toFixed(2)+' Mo';$('post-duel-record-status').textContent='✓ Enregistrement terminé.'}
+        button.disabled=false;button.textContent='● Recommencer la note vocale';postDuelRecorder=null;
+      };
+      postDuelRecorder.start();button.textContent='■ Arrêter l’enregistrement';$('post-duel-record-status').textContent='Enregistrement en cours…';
+    }catch(err){postDuelStream?.getTracks().forEach(t=>t.stop());postDuelStream=null;$('post-duel-record-status').textContent=err.name==='NotAllowedError'?'Autorise l’accès au microphone.':(err.message||'Microphone inaccessible.')}
+  }
+  async function submitPostDuel(e){
+    e.preventDefault();
+    const form=e.target,target=form.dataset.target,originalPost=form.dataset.post,title=$('post-duel-title').value.trim(),description=$('post-duel-description').value.trim(),btn=$('post-duel-submit');
+    if(!title){$('post-duel-message').textContent='Indique le thème du Duel.';return}
+    let challengerId=null,challengerPostId=null,audioFile=null;
+    if(profile?.role==='artist'){
+      challengerId=user.id;audioFile=postDuelRecordedFile||$('post-duel-audio').files[0];
+      if(!audioFile){$('post-duel-message').textContent='Ajoute un fichier audio ou enregistre une note vocale pour participer.';return}
+    }else{
+      challengerId=$('post-duel-challenger').value;challengerPostId=$('post-duel-challenger-post').value||null;
+      if(!challengerId){$('post-duel-message').textContent='Choisis l’artiste qui sera le second concurrent.';return}
+    }
+    if(challengerId===target){$('post-duel-message').textContent='Choisis un autre artiste.';return}
+    btn.disabled=true;btn.textContent='Préparation du Duel…';$('post-duel-message').textContent='';
+    try{
+      if(profile?.role==='artist'){
+        const uploaded=await uploadFile(audioFile,'confam-audio');
+        const {data:createdPost,error:postError}=await db.from('confam_posts').insert({user_id:user.id,content:'',audio_url:uploaded.url,audio_path:uploaded.path,audio_name:audioFile.name||'Note vocale du Duel',post_type:postDuelRecordedFile?'voice_note':'audio'}).select('id').single();
+        if(postError)throw postError;challengerPostId=createdPost.id;
+      }
+      btn.textContent='Envoi de la demande…';
+      const {error}=await db.rpc('confam_create_faceoff',{p_title:title,p_description:description,p_artist_a_id:target,p_artist_b_id:challengerId,p_post_a_id:originalPost,p_post_b_id:challengerPostId,p_ends_at:null});
+      if(error)throw error;
+      $('post-duel-modal').classList.add('hidden');notify('Demande de Duel envoyée.');await loadFaceoffs();
+    }catch(err){$('post-duel-message').textContent=err.message||'Impossible de créer le Duel.'}
+    finally{btn.disabled=false;btn.textContent='Lancer le Duel →'}
   }
   async function uploadFile(file,bucket){if(!file)return null;const max=bucket==='confam-audio'?50:10;if(file.size>max*1024*1024)throw new Error(`Fichier trop volumineux (maximum ${max} Mo).`);const ext=(file.name.split('.').pop()||'bin').replace(/[^a-z0-9]/gi,'');const path=`${user.id}/${Date.now()}-${crypto.randomUUID()}.${ext}`;const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false,contentType:file.type||'application/octet-stream'});if(error)throw error;const {data}=db.storage.from(bucket).getPublicUrl(path);return {url:data.publicUrl,path}}
   async function publishPost(e){e.preventDefault();if(!user){openAuth('login');return}const content=$('post-content').value.trim(),audio=recordedAudioFile||$('post-audio').files[0],image=$('post-image').files[0];if(audio&&profile?.role!=='artist'){$('post-message').textContent='Seuls les profils Artist peuvent publier un fichier audio.';return}if(!content&&!audio&&!image){$('post-message').textContent='Ajoute un texte, un audio ou une image.';return}const btn=e.submitter;btn.disabled=true;btn.textContent='Publication…';$('post-message').textContent='';try{let au=null,im=null;if(audio)au=await uploadFile(audio,'confam-audio');if(image)im=await uploadFile(image,'confam-images');const {error}=await db.from('confam_posts').insert({user_id:user.id,content,audio_url:au?.url||null,audio_path:au?.path||null,audio_name:audio?.name||null,image_url:im?.url||null,image_path:im?.path||null,post_type:recordedVoiceNote?'voice_note':audio?'audio':'post'});if(error)throw error;$('post-form').reset();recordedAudioFile=null;recordedVoiceNote=false;$('voice-note-status').textContent='';$('voice-record-button').textContent='● Enregistrer une note vocale';$('upload-preview').textContent='';$('compose-modal').classList.add('hidden');await loadFeed();notify('Ton post est publié dans la Fam !')}catch(err){console.error('CONFAM publication:',err);$('post-message').textContent=(err.message||'Une erreur est survenue.')+(err.code?' ('+err.code+')':'')}finally{btn.disabled=false;btn.textContent='Publier →'}}
