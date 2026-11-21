@@ -534,40 +534,15 @@ html{
 #compose-form-host .composer-action-row{padding-left:51px}
 @media(max-width:560px){.inline-composer-wrap{padding:11px}.composer-action-row{padding-left:0}.inline-composer .upload-preview,.inline-composer .composer-status,.inline-composer #post-message{padding-left:0}.inline-composer .beat-options{margin-left:0}}
 
-
-/* CONFAM — composer compact, commandes ancrees en bas */
-.inline-composer-wrap{padding:9px 11px!important;margin-bottom:12px!important;border-radius:14px!important}
-.inline-composer{display:flex!important;flex-direction:column!important;gap:3px!important}
-.inline-composer .feed-publish-top{align-items:flex-start!important;gap:8px!important}
-.inline-composer .feed-publish-top .avatar{width:32px;height:32px;flex:0 0 32px}
-.inline-composer .feed-publish-top textarea{min-height:36px!important;height:36px;padding:7px 2px!important;line-height:1.35;resize:vertical}
-.inline-composer .composer-action-row{width:100%;box-sizing:border-box;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 2px 0 40px!important;margin-top:2px}
-.inline-composer .composer-left-actions{display:flex;align-items:center;gap:6px}
-.inline-composer .composer-icon-button,.inline-composer .composer-send-button{width:28px!important;height:28px!important;min-width:28px!important;font-size:16px!important}
-.inline-composer .composer-send-button{font-size:14px!important}
-.inline-composer .voice-note-controls.role-hidden{display:none!important}
-.inline-composer #voice-record-button{display:inline-grid;place-items:center}
-.inline-composer #voice-record-button:disabled{opacity:.65;cursor:wait}
-.inline-composer .upload-preview,.inline-composer .composer-status,.inline-composer #post-message{padding-left:40px}
-@media(max-width:560px){
- .inline-composer-wrap{padding:8px 9px!important}
- .inline-composer .composer-action-row{padding-left:40px!important}
- .inline-composer .feed-publish-top textarea{min-height:34px!important;height:34px}
-}
-
-/* La classe role-hidden doit rester prioritaire sur le style du bouton micro */
-.inline-composer #voice-record-button.role-hidden{display:none!important}
-
-
-/* CONFAM — compositeur compact, inspiration champ de saisie ChatGPT */
+/* CONFAM — compositeur fidèle à la maquette compacte */
 #inline-composer-wrap{
   box-sizing:border-box!important;
-  padding:9px 11px 7px!important;
+  width:100%;
+  padding:8px 9px 7px!important;
   margin:0 0 14px!important;
-  min-height:0!important;
   background:var(--panel)!important;
-  border:1px solid rgba(177,132,235,.25)!important;
-  border-radius:20px!important;
+  border:1px solid rgba(177,132,235,.28)!important;
+  border-radius:19px!important;
   box-shadow:0 3px 12px rgba(0,0,0,.12)!important;
 }
 #inline-composer-wrap .inline-composer{
@@ -576,57 +551,53 @@ html{
   align-items:stretch!important;
   gap:0!important;
   width:100%!important;
-  min-height:0!important;
+  margin:0!important;
 }
 #inline-composer-wrap .feed-publish-top{
   display:flex!important;
   align-items:flex-start!important;
-  gap:8px!important;
+  gap:9px!important;
   width:100%!important;
-  min-height:43px!important;
+  min-height:39px!important;
 }
 #inline-composer-wrap .feed-publish-top .avatar{
-  flex:0 0 29px!important;
-  width:29px!important;
-  height:29px!important;
-  margin:3px 0 0!important;
-  border:0!important;
+  flex:0 0 30px!important;
+  width:30px!important;
+  height:30px!important;
+  margin:2px 0 0!important;
 }
 #inline-composer-wrap .feed-publish-top textarea{
   display:block!important;
   flex:1 1 auto!important;
-  width:calc(100% - 37px)!important;
+  width:calc(100% - 39px)!important;
   min-width:0!important;
-  min-height:42px!important;
-  height:42px!important;
-  max-height:120px!important;
+  min-height:39px!important;
+  height:39px!important;
+  max-height:110px!important;
   box-sizing:border-box!important;
   resize:vertical!important;
-  padding:5px 2px!important;
+  padding:4px 1px!important;
   border:0!important;
   border-radius:0!important;
+  outline:0!important;
   background:transparent!important;
-  color:var(--text)!important;
-  line-height:1.45!important;
   box-shadow:none!important;
-  outline:none!important;
+  color:var(--text)!important;
   font-size:14px!important;
+  line-height:1.4!important;
 }
 #inline-composer-wrap .feed-publish-top textarea:focus{
-  border:0!important;
-  background:transparent!important;
-  box-shadow:none!important;
+  border:0!important;background:transparent!important;box-shadow:none!important;
 }
-#inline-composer-wrap .feed-publish-top textarea::placeholder{color:var(--muted);opacity:.9}
 #inline-composer-wrap .composer-action-row{
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
   width:100%!important;
-  min-height:27px!important;
+  min-height:25px!important;
   box-sizing:border-box!important;
-  padding:2px 1px 0 37px!important;
   margin:0!important;
+  padding:1px 0 0 39px!important;
   border:0!important;
   background:transparent!important;
 }
@@ -640,26 +611,24 @@ html{
 #inline-composer-wrap .composer-send-button{
   display:inline-grid!important;
   place-items:center!important;
-  width:24px!important;
-  height:24px!important;
-  min-width:24px!important;
+  width:23px!important;
+  height:23px!important;
+  min-width:23px!important;
   padding:0!important;
+  margin:0!important;
+  border:0!important;
   border-radius:50%!important;
-  cursor:pointer;
   line-height:1!important;
-  font-size:14px!important;
+  font-size:13px!important;
   box-shadow:none!important;
 }
 #inline-composer-wrap .composer-icon-button{
-  border:0!important;
-  background:rgba(157,105,220,.12)!important;
+  background:rgba(157,105,220,.13)!important;
   color:#d8b9ff!important;
 }
 #inline-composer-wrap .composer-send-button{
-  border:0!important;
   background:linear-gradient(135deg,#9255ec,#c04eb8)!important;
   color:#fff!important;
-  font-size:13px!important;
 }
 #inline-composer-wrap .composer-icon-button:hover,
 #inline-composer-wrap .composer-send-button:hover{filter:brightness(1.12)}
@@ -668,37 +637,22 @@ html{
 #inline-composer-wrap .upload-preview,
 #inline-composer-wrap .composer-status,
 #inline-composer-wrap #post-message,
-#inline-composer-wrap .beat-options{margin:5px 0 0 37px!important;padding:0!important}
-#inline-composer-wrap .composer-attach-menu{bottom:calc(100% + 7px);top:auto}
+#inline-composer-wrap .beat-options{margin:5px 0 0 39px!important;padding:0!important}
+#inline-composer-wrap .composer-attach-menu{left:0;bottom:calc(100% + 7px);top:auto}
 @media(max-width:560px){
-  #inline-composer-wrap{padding:8px 9px 7px!important;border-radius:18px!important}
-  #inline-composer-wrap .feed-publish-top{min-height:40px!important;gap:7px!important}
-  #inline-composer-wrap .feed-publish-top .avatar{flex-basis:27px!important;width:27px!important;height:27px!important}
+  #inline-composer-wrap{padding:7px 8px 6px!important;border-radius:18px!important}
+  #inline-composer-wrap .feed-publish-top{gap:8px!important;min-height:37px!important}
+  #inline-composer-wrap .feed-publish-top .avatar{flex-basis:28px!important;width:28px!important;height:28px!important}
   #inline-composer-wrap .feed-publish-top textarea{
-    width:calc(100% - 34px)!important;
-    min-height:40px!important;height:40px!important;
-    padding:4px 1px!important;font-size:13px!important;
+    width:calc(100% - 36px)!important;
+    min-height:37px!important;height:37px!important;
+    font-size:13px!important;
   }
-  #inline-composer-wrap .composer-action-row{padding:2px 1px 0 34px!important;min-height:25px!important}
+  #inline-composer-wrap .composer-action-row{padding:1px 0 0 36px!important;min-height:24px!important}
   #inline-composer-wrap .composer-icon-button,
-  #inline-composer-wrap .composer-send-button{width:23px!important;height:23px!important;min-width:23px!important}
+  #inline-composer-wrap .composer-send-button{width:22px!important;height:22px!important;min-width:22px!important}
   #inline-composer-wrap .upload-preview,
   #inline-composer-wrap .composer-status,
   #inline-composer-wrap #post-message,
-  #inline-composer-wrap .beat-options{margin-left:34px!important}
-}
-
-
-/* CONFAM — commandes rapprochees des bords du compositeur */
-#inline-composer-wrap{
-  padding-left:7px!important;
-  padding-right:7px!important;
-}
-#inline-composer-wrap .composer-action-row{
-  padding-left:0!important;
-  padding-right:0!important;
-}
-@media(max-width:560px){
-  #inline-composer-wrap{padding-left:6px!important;padding-right:6px!important}
-  #inline-composer-wrap .composer-action-row{padding-left:0!important;padding-right:0!important}
+  #inline-composer-wrap .beat-options{margin-left:36px!important}
 }
