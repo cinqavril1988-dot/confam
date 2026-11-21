@@ -280,9 +280,7 @@ document.addEventListener('submit',e=>{const fc=e.target.closest('[data-focommen
       refreshButton.textContent='↻ Vérification…';
       await checkPwaUpdate();
       if(pwaRegistration?.waiting&&navigator.serviceWorker.controller){
-        showPwaUpdate();
-        refreshButton.disabled=false;
-        refreshButton.textContent='↻ Actualiser';
+        pwaRegistration.waiting.postMessage({type:'SKIP_WAITING'});
       }else{
         window.location.reload();
       }
