@@ -212,53 +212,85 @@ document.addEventListener('submit',e=>{const fc=e.target.closest('[data-focommen
     if(document.getElementById('pwa-update-banner'))return;
     const banner=document.createElement('div');
     banner.id='pwa-update-banner';
-    banner.innerHTML='<span><b>Nouvelle version disponible</b><small>Actualise CONFAM pour profiter des nouveautés.</small></span><button type="button" id="pwa-update-now">Actualiser</button><button type="button" id="pwa-update-close" aria-label="Fermer">×</button>';
+    banner.innerHTML='<span><b>Nouvelle version disponible</b><small>Appuie sur Actualiser pour installer la mise à jour.</small></span><button type="button" id="pwa-update-now">Actualiser maintenant</button><button type="button" id="pwa-update-close" aria-label="Fermer">×</button>';
     document.querySelector('.main-area')?.prepend(banner);
-    document.getElementById('pwa-update-now')?.addEventListener('click',()=>{
-      const waiting=pwaRegistration?.waiting;
-      if(waiting)waiting.postMessage({type:'SKIP_WAITING'});
-      else window.location.reload();
-    });
+    document.getElementById('pwa-update-now')?.addEventListener('click',activatePwaUpdate);
     document.getElementById('pwa-update-close')?.addEventListener('click',()=>banner.remove());
+  }
+  async function activatePwaUpdate(){
+    const button=$('refresh-app-button');
+    if(button){button.disabled=true;button.textContent='Actualisation…'}
+    try{
+      if(pwaRegistration){
+        await pwaRegistration.update().catch(()=>{});
+        const waiting=pwaRegistration.waiting;
+        if(waiting){waiting.postMessage({type:'SKIP_WAITING'});return}
+      }
+      window.location.reload();
+    }catch(err){
+      console.warn('CONFAM update:',err);
+      window.location.reload();
+    }
+  }
+  async function checkPwaUpdate(){
+    if(!('serviceWorker'in navigator)||!pwaRegistration)return;
+    try{
+      await pwaRegistration.update();
+      if(pwaRegistration.waiting&&navigator.serviceWorker.controller)showPwaUpdate();
+    }catch(err){console.warn('Vérification mise à jour CONFAM:',err)}
   }
   function setupPwa(){
     const installButton=$('install-app-button');
-    if(!installButton)return;
+    const refreshButton=$('refresh-app-button');
     const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
-    const syncInstallButton=()=>installButton.classList.toggle('pwa-install-hidden',isStandalone());
-    syncInstallButton();
-    window.matchMedia('(display-mode: standalone)').addEventListener?.('change',syncInstallButton);
-    installButton.addEventListener('click',async()=>{
-      if(isStandalone()){notify('CONFAM est déjà installé sur cet appareil.');return}
-      if(deferredInstallPrompt){
-        deferredInstallPrompt.prompt();
-        const choice=await deferredInstallPrompt.userChoice;
-        if(choice?.outcome==='accepted')notify('Installation de CONFAM acceptée.');
-        deferredInstallPrompt=null;
-        installButton.textContent='Installer CONFAM';
-        return;
-      }
-      const ua=navigator.userAgent||'';
-      if(/iphone|ipad|ipod/i.test(ua)){
-        alert('Pour installer CONFAM sur iPhone ou iPad :\n1. Ouvre ce site dans Safari.\n2. Appuie sur le bouton Partager.\n3. Choisis « Sur l’écran d’accueil ».\n4. Appuie sur Ajouter.');
-      }else{
-        alert('Pour installer CONFAM : ouvre le menu de ton navigateur (⋮ ou …), puis choisis « Installer CONFAM » ou « Installer l’application ».');
-      }
-    });
-    window.addEventListener('beforeinstallprompt',event=>{
-      event.preventDefault();
-      deferredInstallPrompt=event;
-      installButton.classList.remove('pwa-install-hidden');
-    });
-    window.addEventListener('appinstalled',()=>{
-      deferredInstallPrompt=null;
+    if(installButton){
+      const syncInstallButton=()=>installButton.classList.toggle('pwa-install-hidden',isStandalone());
       syncInstallButton();
-      notify('CONFAM a été installé sur ton appareil.');
+      window.matchMedia('(display-mode: standalone)').addEventListener?.('change',syncInstallButton);
+      installButton.addEventListener('click',async()=>{
+        if(isStandalone()){notify('CONFAM est déjà installé sur cet appareil.');return}
+        if(deferredInstallPrompt){
+          deferredInstallPrompt.prompt();
+          const choice=await deferredInstallPrompt.userChoice;
+          if(choice?.outcome==='accepted')notify('Installation de CONFAM acceptée.');
+          deferredInstallPrompt=null;
+          installButton.textContent='Installer CONFAM';
+          return;
+        }
+        const ua=navigator.userAgent||'';
+        if(/iphone|ipad|ipod/i.test(ua)){
+          alert('Pour installer CONFAM sur iPhone ou iPad :\\n1. Ouvre ce site dans Safari.\\n2. Appuie sur le bouton Partager.\\n3. Choisis « Sur l’écran d’accueil ».\\n4. Appuie sur Ajouter.');
+        }else{
+          alert('Pour installer CONFAM : ouvre le menu de ton navigateur (⋮ ou …), puis choisis « Installer CONFAM » ou « Installer l’application ».');
+        }
+      });
+      window.addEventListener('beforeinstallprompt',event=>{
+        event.preventDefault();
+        deferredInstallPrompt=event;
+        installButton.classList.remove('pwa-install-hidden');
+      });
+      window.addEventListener('appinstalled',()=>{
+        deferredInstallPrompt=null;
+        syncInstallButton();
+        notify('CONFAM a été installé sur ton appareil.');
+      });
+    }
+    refreshButton?.addEventListener('click',async()=>{
+      refreshButton.disabled=true;
+      refreshButton.textContent='↻ Vérification…';
+      await checkPwaUpdate();
+      if(pwaRegistration?.waiting&&navigator.serviceWorker.controller){
+        showPwaUpdate();
+        refreshButton.disabled=false;
+        refreshButton.textContent='↻ Actualiser';
+      }else{
+        window.location.reload();
+      }
     });
-    if('serviceWorker'in navigator && location.protocol.startsWith('http')){
+    if('serviceWorker'in navigator&&location.protocol.startsWith('http')){
       navigator.serviceWorker.register('/sw.js').then(reg=>{
         pwaRegistration=reg;
-        if(reg.waiting && navigator.serviceWorker.controller)showPwaUpdate();
+        if(reg.waiting&&navigator.serviceWorker.controller)showPwaUpdate();
         reg.addEventListener('updatefound',()=>{
           const worker=reg.installing;
           if(!worker)return;
@@ -266,7 +298,11 @@ document.addEventListener('submit',e=>{const fc=e.target.closest('[data-focommen
             if(worker.state==='installed'&&navigator.serviceWorker.controller)showPwaUpdate();
           });
         });
-        reg.update().catch(()=>{});
+        checkPwaUpdate();
+        setInterval(checkPwaUpdate,60000);
+        document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkPwaUpdate()});
+        window.addEventListener('pageshow',checkPwaUpdate);
+        window.addEventListener('focus',checkPwaUpdate);
       }).catch(err=>console.warn('PWA service worker:',err));
       navigator.serviceWorker.addEventListener('controllerchange',()=>{
         if(updateReloading)return;
