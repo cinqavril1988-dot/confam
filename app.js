@@ -57,7 +57,7 @@
       $('post-duel-form').addEventListener('submit',submitPostDuel);
     }
     if(postDuelRecorder&&postDuelRecorder.state==='recording'){postDuelRecorder.stop()}
-    postDuelRecordedFile=null;$('post-duel-audio').value='';$('post-duel-file-name').textContent='';$('post-duel-record-status').textContent='';$('post-duel-record').textContent='● Enregistrer une note vocale';
+    postDuelRecordedFile=null;$('post-duel-audio').value='';$('post-duel-file-name').textContent='';$('post-duel-record-status').textContent='';$('post-duel-record').textContent='● Enregistrer une note vocale';$('post-duel-title').value='';$('post-duel-description').value='';
     $('post-duel-target').textContent=artistName;
     $('post-duel-message').textContent='';
     const form=$('post-duel-form');form.dataset.target=artistId;form.dataset.post=postId;
