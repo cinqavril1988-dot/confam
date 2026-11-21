@@ -767,9 +767,9 @@ html{
 }
 
 
-/* ALIGNEMENT — même distance bord gauche / avatar / icônes */
+/* ALIGNEMENT — icônes sur le même axe horizontal que le bord gauche de l’avatar */
 #inline-composer-wrap .composer-action-row{
-  left:9px!important;
+  left:15px!important;
   padding-left:0!important;
 }
 @media(max-width:560px){
