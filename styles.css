@@ -557,3 +557,133 @@ html{
 
 /* La classe role-hidden doit rester prioritaire sur le style du bouton micro */
 .inline-composer #voice-record-button.role-hidden{display:none!important}
+
+
+/* CONFAM — composer Feed, layout editorial et barre d'actions ancree en bas */
+#inline-composer-wrap{
+  background:linear-gradient(145deg,rgba(31,26,46,.98),rgba(20,18,31,.98))!important;
+  border:1px solid rgba(177,132,235,.22)!important;
+  border-radius:18px!important;
+  padding:14px 15px 11px!important;
+  margin:0 0 16px!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);
+}
+#inline-composer-wrap .inline-composer{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:0!important;
+  width:100%;
+}
+#inline-composer-wrap .feed-publish-top{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:11px!important;
+  width:100%;
+  min-height:76px;
+}
+#inline-composer-wrap .feed-publish-top .avatar{
+  flex:0 0 38px!important;
+  width:38px!important;
+  height:38px!important;
+  margin-top:5px;
+  border:1px solid rgba(190,150,245,.32);
+}
+#inline-composer-wrap .feed-publish-top textarea{
+  display:block!important;
+  flex:1 1 auto!important;
+  width:calc(100% - 50px)!important;
+  min-width:0!important;
+  min-height:76px!important;
+  height:76px!important;
+  max-height:180px!important;
+  box-sizing:border-box!important;
+  resize:vertical!important;
+  padding:10px 11px!important;
+  border:1px solid rgba(177,132,235,.13)!important;
+  border-radius:12px!important;
+  background:rgba(8,7,15,.22)!important;
+  color:var(--text)!important;
+  line-height:1.5!important;
+  box-shadow:none!important;
+}
+#inline-composer-wrap .feed-publish-top textarea:focus{
+  border-color:rgba(177,132,235,.58)!important;
+  background:rgba(8,7,15,.32)!important;
+  outline:none!important;
+}
+#inline-composer-wrap .composer-action-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  min-height:40px;
+  box-sizing:border-box!important;
+  padding:8px 1px 0 49px!important;
+  margin:0!important;
+  border:0!important;
+}
+#inline-composer-wrap .composer-left-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+}
+#inline-composer-wrap .composer-plus-wrap{position:relative;display:flex;align-items:center}
+#inline-composer-wrap .composer-icon-button,
+#inline-composer-wrap .composer-send-button{
+  display:inline-grid!important;
+  place-items:center!important;
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  cursor:pointer;
+  line-height:1!important;
+}
+#inline-composer-wrap .composer-icon-button{
+  border:1px solid rgba(190,150,245,.2)!important;
+  background:rgba(157,105,220,.12)!important;
+  color:#d8b9ff!important;
+  font-size:19px!important;
+}
+#inline-composer-wrap .composer-icon-button:hover{
+  background:rgba(157,105,220,.24)!important;
+  border-color:rgba(190,150,245,.45)!important;
+}
+#inline-composer-wrap .composer-send-button{
+  border:0!important;
+  background:linear-gradient(135deg,#9255ec,#c04eb8)!important;
+  color:#fff!important;
+  font-size:16px!important;
+  box-shadow:0 3px 10px rgba(145,75,210,.25);
+}
+#inline-composer-wrap .composer-send-button:hover{filter:brightness(1.1)}
+#inline-composer-wrap #voice-record-button.role-hidden{display:none!important}
+#inline-composer-wrap #voice-record-button:disabled{opacity:.55;cursor:wait}
+#inline-composer-wrap .upload-preview,
+#inline-composer-wrap .composer-status,
+#inline-composer-wrap #post-message,
+#inline-composer-wrap .beat-options{margin-left:49px!important;padding-left:0!important}
+#inline-composer-wrap .composer-attach-menu{bottom:calc(100% + 8px);top:auto}
+@media(max-width:560px){
+  #inline-composer-wrap{padding:11px 11px 9px!important;border-radius:15px!important}
+  #inline-composer-wrap .feed-publish-top{min-height:72px;gap:9px!important}
+  #inline-composer-wrap .feed-publish-top .avatar{flex-basis:34px!important;width:34px!important;height:34px!important}
+  #inline-composer-wrap .feed-publish-top textarea{
+    width:calc(100% - 43px)!important;
+    min-height:72px!important;height:72px!important;
+    padding:9px!important;font-size:14px!important;
+  }
+  #inline-composer-wrap .composer-action-row{
+    padding:8px 1px 0 43px!important;
+    min-height:39px;
+  }
+  #inline-composer-wrap .composer-left-actions{gap:8px!important}
+  #inline-composer-wrap .composer-icon-button,
+  #inline-composer-wrap .composer-send-button{width:30px!important;height:30px!important;min-width:30px!important}
+  #inline-composer-wrap .upload-preview,
+  #inline-composer-wrap .composer-status,
+  #inline-composer-wrap #post-message,
+  #inline-composer-wrap .beat-options{margin-left:43px!important}
+}
