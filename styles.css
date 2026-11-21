@@ -505,3 +505,31 @@ html{
 
 /* CONFAM — raccourcis de publication */
 #quick-compose{cursor:pointer}#quick-compose-button{cursor:pointer}#mobile-create-post,#mobile-compose{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}#mobile-create-post small,#mobile-compose small{font-size:9px;line-height:1.1}
+
+
+/* Inline feed composer: one continuous input surface, without a divider */
+.inline-composer-wrap{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:13px 15px;margin-bottom:17px}
+.inline-composer{gap:8px}
+.inline-composer .feed-publish-top{align-items:center;gap:10px}
+.inline-composer .feed-publish-top textarea{min-height:48px;max-height:160px;resize:vertical;border:0!important;background:transparent;padding:10px 2px;box-shadow:none}
+.composer-action-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-left:50px}
+.composer-left-actions{display:flex;align-items:center;gap:8px}
+.composer-plus-wrap{position:relative}
+.composer-icon-button,.composer-send-button{width:36px;height:36px;display:inline-grid;place-items:center;border:0;border-radius:50%;background:#282137;color:#d8b9ff;font-size:22px;cursor:pointer}
+.composer-icon-button:hover,.composer-send-button:hover{background:#3a2b50}
+.composer-send-button{background:linear-gradient(135deg,#8e4df2,#c34bb6);color:white;font-size:18px}
+.composer-attach-menu{position:absolute;left:0;bottom:44px;z-index:20;min-width:175px;padding:6px;border:1px solid var(--line);border-radius:12px;background:#171421;box-shadow:0 12px 30px #0008}
+.composer-attach-menu button{display:block;width:100%;padding:10px;border:0;border-radius:8px;text-align:left;background:transparent;color:var(--text);font-size:12px;cursor:pointer}
+.composer-attach-menu button:hover{background:#292238}
+.file-input-holder{display:none!important}
+.inline-composer .voice-note-controls{display:inline-grid;place-items:center;margin:0;padding:0}
+.inline-composer .voice-note-controls.role-hidden{display:none!important}
+.inline-composer .voice-note-controls#voice-record-button{display:inline-grid}
+.inline-composer .upload-preview,.inline-composer .composer-status,.inline-composer #post-message{padding-left:50px}
+.inline-composer .beat-options{margin-left:50px}
+.inline-composer-wrap.challenge-composer-away{min-height:0;padding:0;border:0;margin:0}
+.inline-composer-wrap.challenge-composer-away>*{display:none}
+#compose-form-host .feed-publish-form{margin-top:4px}
+#compose-form-host .feed-publish-top textarea{border:1px solid var(--line);background:#171523;border-radius:12px;padding:12px}
+#compose-form-host .composer-action-row{padding-left:51px}
+@media(max-width:560px){.inline-composer-wrap{padding:11px}.composer-action-row{padding-left:0}.inline-composer .upload-preview,.inline-composer .composer-status,.inline-composer #post-message{padding-left:0}.inline-composer .beat-options{margin-left:0}}
