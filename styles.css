@@ -257,3 +257,44 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
   .faceoff-actions .vote-b-button{margin-left:auto}
   .faceoff-vote-progress{padding:10px}
 }
+
+
+/* CONFAM Duel : portraits brush plus compacts */
+.faceoff-versus{min-height:0!important;padding:12px 8px!important;gap:8px!important;overflow:visible!important}
+.faceoff-contestant{gap:5px!important}
+.faceoff-avatar{
+  width:clamp(105px,17vw,148px)!important;
+  max-width:148px!important;
+  aspect-ratio:1.32/1!important;
+  height:auto!important;
+  border:0!important;
+  border-radius:0!important;
+  background:linear-gradient(135deg,#ff9b32,#ed3d48)!important;
+  clip-path:polygon(5% 18%,13% 12%,20% 15%,26% 7%,34% 13%,43% 5%,51% 12%,60% 7%,68% 15%,78% 9%,87% 16%,96% 13%,92% 27%,98% 36%,91% 47%,97% 58%,88% 68%,93% 79%,82% 83%,73% 94%,62% 88%,51% 97%,41% 89%,30% 96%,22% 87%,11% 91%,14% 78%,4% 70%,10% 58%,2% 47%,10% 35%);
+  filter:drop-shadow(0 7px 12px #0009) drop-shadow(0 0 8px #ff713755);
+  box-shadow:none!important;
+}
+.faceoff-contestant:nth-of-type(3) .faceoff-avatar{transform:scaleX(-1)}
+.faceoff-avatar img{width:100%;height:100%;object-fit:cover;clip-path:inherit}
+.faceoff-bolt{top:48%!important;font-size:clamp(72px,11vw,112px)!important;transform:translate(-50%,-50%) rotate(18deg) scale(1.05)!important}
+@media(max-width:600px){
+ .faceoff-versus{min-height:0!important;padding:9px 3px!important}
+ .faceoff-avatar{width:clamp(92px,34vw,126px)!important;max-width:126px!important}
+ .faceoff-bolt{font-size:clamp(64px,19vw,88px)!important}
+}
+/* Commentaires des Duels */
+.fo-comment-thread{margin:9px 0 0 13px;padding-left:10px;border-left:1px solid #573324}
+.fo-comment-row{display:flex;align-items:flex-start;gap:8px}
+.fo-comment-avatar.avatar{width:27px;height:27px;min-width:27px;font-size:10px;flex-shrink:0}
+.fo-comment-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.fo-comment-main{min-width:0;flex:1}
+.fo-comment-main>b{font-size:11px;color:#fff}
+.fo-comment-main p{margin:3px 0;color:#ead2c6;font-size:12px;overflow-wrap:anywhere}
+.fo-comment-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fo-comment-actions button{border:0;background:transparent;color:#b59b90;padding:3px 0;font-size:10px;cursor:pointer}
+.fo-comment-actions button.liked{color:#ff6b82}
+.fo-comment-reply-form{display:flex;gap:7px;margin:7px 0}
+.fo-comment-reply-form input{min-width:0;flex:1;border:1px solid #573324;border-radius:15px;background:#100b0a;color:#fff;padding:8px 10px;font-size:11px}
+.fo-comment-reply-form button{border:0;border-radius:15px;background:#9c4027;color:#fff;padding:7px 11px;font-size:10px}
+.fo-comment-challenge{color:#ffc36a!important;font-weight:800}
+.fo-no-comments{font-size:11px;padding:5px 0}
