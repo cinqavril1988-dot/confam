@@ -369,3 +369,45 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
   .faceoff-avatar{width:clamp(96px,37vw,124px)!important;height:clamp(60px,23vw,76px)!important}
   .faceoff-bolt{top:43%!important;font-size:clamp(58px,18vw,78px)!important}
 }
+
+
+/* CONFAM compact cards: posts and duels */
+.post-list{gap:10px!important}
+.post-card{padding:12px!important;border-radius:13px!important}
+.post-head{gap:8px!important}
+.post-head>.avatar{width:34px!important;height:34px!important;font-size:12px!important}
+.post-identity b{font-size:12px!important}
+.post-identity small{font-size:9px!important;margin-top:2px!important}
+.post-content{font-size:12px!important;line-height:1.5!important;margin:10px 0!important}
+.post-image{max-height:300px!important;border-radius:9px!important;margin-bottom:9px!important}
+.audio-player{padding:9px!important;gap:9px!important;margin:9px 0!important;border-radius:10px!important}
+.play-button{width:34px!important;height:34px!important;font-size:14px!important}
+.post-actions{gap:5px!important;margin-top:8px!important}
+.post-actions .action-button{font-size:10px!important;padding:6px 7px!important}
+.post-actions .action-count{font-size:9px!important}
+.comment-list{margin-top:7px!important}
+.faceoff-card{padding:12px!important;border-radius:13px!important;margin-bottom:10px!important}
+.faceoff-top{gap:7px!important}
+.faceoff-status{font-size:9px!important;padding:4px 7px!important}
+.faceoff-card h2{font-size:16px!important;margin:10px 0 4px!important}
+.faceoff-description{font-size:11px!important;line-height:1.4!important}
+.faceoff-versus{padding:9px 5px!important;margin:10px 0!important;gap:5px!important;border-radius:10px!important}
+.faceoff-contestant{gap:4px!important}
+.faceoff-avatar{width:38px!important;height:38px!important;font-size:14px!important}
+.faceoff-contestant b{font-size:10px!important}
+.faceoff-contestant small{font-size:9px!important}
+.faceoff-contestant audio{height:27px!important;max-width:160px!important}
+.faceoff-bolt{font-size:clamp(42px,7vw,62px)!important}
+.faceoff-actions,.faceoff-reactions{gap:5px!important;margin:7px 0!important}
+.faceoff-actions .primary-button,.faceoff-actions .outline-button{padding:6px 9px!important;font-size:10px!important}
+.faceoff-reactions button{padding:5px 8px!important;font-size:10px!important}
+.faceoff-social{margin-top:9px!important;padding-top:6px!important}
+.faceoff-comments{max-height:145px!important}
+@media(max-width:600px){
+ .post-card{padding:10px!important}
+ .post-image{max-height:250px!important}
+ .faceoff-card{padding:10px!important}
+ .faceoff-avatar{width:34px!important;height:34px!important}
+ .faceoff-versus{padding:7px 3px!important}
+ .faceoff-bolt{font-size:clamp(38px,14vw,54px)!important}
+}
