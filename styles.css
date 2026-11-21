@@ -858,3 +858,20 @@ html{
 @keyframes confam-immersive-pulse{0%{transform:scaleY(.45);opacity:.55}100%{transform:scaleY(1);opacity:.95}}
 @media(prefers-reduced-motion:reduce){.audio-immersive-wave span{animation:none!important}}
 @media(max-width:560px){.audio-player.audio-immersive{border-radius:13px!important}.audio-immersive-art{max-height:none}.audio-immersive-overlay{padding:12px 10px 10px}.audio-immersive-play{width:50px!important;height:50px!important;min-width:50px!important}.audio-immersive-wave{height:38px!important}.audio-immersive-wave span{max-height:34px!important}}
+
+/* Mobile feed: remove publication cards and make media edge-to-edge */
+@media(max-width:800px){
+ .post-list{gap:0!important}
+ .post-card{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;margin:0!important}
+ .post-card+.post-card{border-top:1px solid rgba(255,255,255,.09)!important}
+ .post-head{padding:13px 12px 8px!important}
+ .post-content{padding:0 12px!important;margin:10px 0 12px!important}
+ .post-image{display:block;width:100%!important;max-width:none!important;max-height:none!important;height:auto!important;object-fit:cover!important;border-radius:0!important;margin:0 0 10px!important}
+ .audio-player{margin:8px 0 10px!important}
+ .audio-player.audio-immersive{margin:0 0 10px!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+ .post-actions{margin:0 12px 10px!important;padding-top:10px!important}
+ .post-duel-request{margin:0 12px 8px!important}
+ .post-duel-linked,.beat-source-link{margin-left:12px!important;margin-right:12px!important}
+ .beat-participation-strip{margin-left:8px!important;margin-right:8px!important}
+ .comment-list{margin:0 12px 12px!important}
+}
