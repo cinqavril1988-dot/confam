@@ -788,3 +788,13 @@ html{
 .audio-player .waveform{height:8px!important;gap:1px!important}.audio-player .waveform span{transform:scaleY(.62)!important;transform-origin:center!important}
 .audio-player .audio-meta{font-size:6px!important;margin-top:1px!important}
 @media(max-width:560px){.audio-player{gap:4px!important;padding:4px!important;margin:4px 0!important}.audio-player .play-button{width:20px!important;height:20px!important;min-width:20px!important;border-radius:6px!important}.audio-player .waveform{height:7px!important}}
+
+/* Spectre audio animé — ondulation organique style assistant vocal */
+.audio-player .waveform{height:12px!important;gap:1px!important;align-items:center!important}
+.audio-player .waveform span{height:clamp(2px,calc(var(--h)*.19),7px)!important;transform:scaleY(.65)!important;transform-origin:center!important;background:linear-gradient(180deg,#d9a8ff,#a66cff,#e46ac2)!important;opacity:.9!important;animation:confamVoiceWave 1.05s ease-in-out infinite alternate!important;animation-delay:calc(var(--i,0)*-37ms)!important}
+.audio-player .waveform span:nth-child(4n){animation-duration:.76s!important}
+.audio-player .waveform span:nth-child(5n){animation-duration:1.32s!important}
+.audio-player .waveform span:nth-child(7n){animation-duration:.92s!important}
+@keyframes confamVoiceWave{0%{transform:scaleY(.38)}45%{transform:scaleY(1.05)}100%{transform:scaleY(.58)}}
+@media(max-width:560px){.audio-player .waveform{height:10px!important}}
+@media(prefers-reduced-motion:reduce){.audio-player .waveform span{animation:none!important}}
