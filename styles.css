@@ -765,3 +765,16 @@ html{
   #inline-composer-wrap #post-message,
   #inline-composer-wrap .beat-options{margin-left:36px!important}
 }
+
+
+/* ALIGNEMENT — commandes d'ajout et micro au bord gauche du compositeur */
+#inline-composer-wrap .composer-action-row{
+  left:3px!important;
+  padding-left:0!important;
+}
+@media(max-width:560px){
+  #inline-composer-wrap .composer-action-row{
+    left:3px!important;
+    padding-left:0!important;
+  }
+}
