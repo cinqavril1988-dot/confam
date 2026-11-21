@@ -502,3 +502,6 @@ html{
 
 /* CONFAM Beats dedicated view */
 .beats-intro{display:flex;align-items:center;gap:14px;padding:18px 20px;margin:0 0 20px;border:1px solid #332546;border-radius:18px;background:linear-gradient(120deg,#171224,#211432)}.beats-intro-symbol{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#9b5cff,#ed4bb5);font-size:23px;color:#fff;flex-shrink:0}.beats-intro b,.beats-intro span{display:block}.beats-intro b{font-size:15px;margin-bottom:4px}.beats-intro span{color:var(--muted);font-size:12px;line-height:1.5}
+
+/* CONFAM — raccourcis de publication */
+#quick-compose{cursor:pointer}#quick-compose-button{cursor:pointer}#mobile-create-post,#mobile-compose{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}#mobile-create-post small,#mobile-compose small{font-size:9px;line-height:1.1}
