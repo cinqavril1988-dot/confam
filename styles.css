@@ -298,3 +298,74 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
 .fo-comment-reply-form button{border:0;border-radius:15px;background:#9c4027;color:#fff;padding:7px 11px;font-size:10px}
 .fo-comment-challenge{color:#ffc36a!important;font-weight:800}
 .fo-no-comments{font-size:11px;padding:5px 0}
+
+
+/* CONFAM Duel — portraits intégrés dans une vraie trace de pinceau horizontale */
+.faceoff-versus{
+  min-height:0!important;
+  padding:9px 5px 12px!important;
+  gap:4px!important;
+  overflow:visible!important;
+  align-items:center!important;
+}
+.faceoff-contestant{
+  min-width:0!important;
+  gap:4px!important;
+  align-items:center!important;
+}
+.faceoff-avatar{
+  position:relative!important;
+  isolation:isolate;
+  width:clamp(104px,16vw,142px)!important;
+  max-width:142px!important;
+  height:clamp(66px,10vw,88px)!important;
+  aspect-ratio:auto!important;
+  border:0!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+  display:grid!important;
+  place-items:center!important;
+  background:
+    linear-gradient(90deg,#17100e 0%,#2a1712 14%,#a84925 30%,#e66b32 52%,#a83b2a 76%,#20110e 100%)!important;
+  clip-path:polygon(0 23%,5% 19%,9% 11%,16% 16%,23% 7%,31% 13%,39% 5%,48% 12%,56% 4%,64% 12%,73% 7%,82% 14%,91% 9%,97% 18%,100% 24%,96% 32%,99% 39%,95% 47%,100% 55%,94% 62%,98% 70%,89% 75%,83% 85%,73% 80%,65% 91%,55% 84%,46% 96%,37% 86%,28% 94%,20% 84%,12% 91%,9% 81%,2% 78%,5% 66%,0 59%,4% 49%,1% 40%,5% 31%);
+  filter:drop-shadow(0 5px 7px #000b) drop-shadow(0 0 5px #ed713744);
+  box-shadow:none!important;
+  font-size:22px!important;
+  color:#fff!important;
+}
+.faceoff-avatar::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:repeating-linear-gradient(176deg,transparent 0 7px,#160b0870 8px 9px,transparent 10px 14px);
+  mix-blend-mode:multiply;
+  opacity:.34;
+}
+.faceoff-avatar img{
+  position:relative;
+  z-index:1;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  clip-path:inherit;
+}
+.faceoff-contestant:nth-of-type(3) .faceoff-avatar{
+  transform:scaleX(-1)!important;
+}
+.faceoff-contestant:nth-of-type(3) .faceoff-avatar img{
+  transform:scaleX(-1);
+}
+.faceoff-contestant b{font-size:11px!important}
+.faceoff-contestant small{font-size:9px!important}
+.faceoff-bolt{
+  top:43%!important;
+  font-size:clamp(62px,9vw,94px)!important;
+  transform:translate(-50%,-50%) rotate(18deg) scale(1.05)!important;
+}
+@media(max-width:600px){
+  .faceoff-versus{padding:8px 2px 10px!important;gap:0!important}
+  .faceoff-avatar{width:clamp(96px,37vw,124px)!important;height:clamp(60px,23vw,76px)!important}
+  .faceoff-bolt{top:43%!important;font-size:clamp(58px,18vw,78px)!important}
+}
