@@ -71,7 +71,13 @@
       $('post-duel-challenger').addEventListener('change',loadPostDuelChallengerPosts);
       $('post-duel-audio').addEventListener('change',e=>{postDuelRecordedFile=null;postDuelRecordedFileName='';$('post-duel-file-name').textContent=e.target.files[0]?.name||''});
       $('post-duel-record').addEventListener('click',togglePostDuelRecording);
-      $('post-duel-form').addEventListener('submit',submitPostDuel);
+      const duelForm=$('post-duel-form'),duelButton=$('post-duel-submit');
+      duelForm.addEventListener('submit',submitPostDuel);
+      duelButton.addEventListener('click',event=>{
+        event.preventDefault();
+        $('post-duel-message').textContent='✓ Clic détecté — lancement de la demande…';
+        submitPostDuel({preventDefault(){},target:duelForm,submitter:duelButton});
+      });
     }
     if(postDuelRecorder&&postDuelRecorder.state==='recording'){postDuelRecorder.stop()}
     stopPostDuelRecordingTimer();postDuelRecordingStartedAt=0;
