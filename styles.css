@@ -473,3 +473,11 @@ html{
 .post-duel-request{display:flex;justify-content:flex-end;padding:8px 12px 10px;border-top:1px solid var(--border-color,rgba(255,255,255,.08))}
 .post-duel-button{border:1px solid rgba(193,138,255,.38);background:rgba(193,138,255,.10);color:var(--text-color,#fff);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:background .18s,border-color .18s}
 .post-duel-button:hover{background:rgba(193,138,255,.20);border-color:rgba(193,138,255,.7)}
+
+
+/* CONFAM PWA — actualisation manuelle disponible dans l'application */
+.pwa-refresh-button{flex:0 0 auto;border:1px solid #704b36;border-radius:999px;padding:9px 12px;background:#211711;color:#ffd1b0;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap}
+.pwa-refresh-button:hover{border-color:#ff9b57;background:#382016}
+.pwa-refresh-button:disabled{opacity:.65;cursor:wait}
+#pwa-update-now{min-width:116px}
+@media(max-width:700px){.pwa-refresh-button{padding:8px 9px;font-size:10px}}
