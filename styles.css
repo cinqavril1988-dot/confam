@@ -443,3 +443,18 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
   #pwa-update-banner small{max-width:190px;line-height:1.35}
   #pwa-update-now{padding:8px 10px;font-size:10px}
 }
+
+
+/* CONFAM mobile — empêcher le zoom automatique au focus des champs */
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+@media(max-width:700px){
+  input,
+  textarea,
+  select,
+  [contenteditable="true"]{
+    font-size:16px!important;
+  }
+}
