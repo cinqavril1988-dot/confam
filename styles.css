@@ -489,3 +489,12 @@ html{
 @keyframes confamWelcomeGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.45)}}
 .welcome-strip.welcome-dismissed{opacity:0;transform:translateY(-9px);max-height:0;padding-top:0;padding-bottom:0;margin-bottom:0;border-width:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.welcome-strip,.welcome-strip.welcome-arrival{animation:none;transition:none}}
+
+/* CONFAM — bouton Demander un Duel plus compact */
+.post-duel-request{padding:5px 9px 7px!important}
+.post-duel-button{padding:5px 10px!important;font-size:10px!important;line-height:1.2!important}
+.post-duel-linked{margin:5px 12px 8px;padding:9px 11px;border:1px solid rgba(193,138,255,.25);border-radius:12px;background:rgba(193,138,255,.06)}
+.post-duel-linked-label{font-size:10px;font-weight:800;color:#c18aff;margin-bottom:4px}
+.post-duel-linked-anchor{display:block;color:var(--text-color,#eee);font-size:11px;text-decoration:none;line-height:1.4}
+.post-duel-linked-anchor:hover{text-decoration:underline;color:#c18aff}
+.post-duel-linked-anchor span{color:#c18aff;font-weight:800}
