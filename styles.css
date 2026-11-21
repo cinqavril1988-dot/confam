@@ -110,3 +110,49 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
 /* Bouton pour développer la liste des commentaires */
 .show-more-comments{display:inline-flex;align-items:center;margin:9px 0 4px 36px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:transparent;color:#ff9a5a;font-size:11px;font-weight:700;cursor:pointer}
 .show-more-comments:hover{background:#ff6a2418;border-color:#ff7842}
+
+/* Duel Arena — portraits face à face et grande foudre traversante */
+.faceoff-versus{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:12px;
+  align-items:start;
+  padding:14px 12px;
+  overflow:hidden;
+}
+.faceoff-contestant{position:relative;z-index:1;width:100%;gap:8px}
+.faceoff-avatar{
+  width:100%;
+  max-width:190px;
+  height:auto;
+  aspect-ratio:4/5;
+  border-radius:14px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  border:1px solid #ff9a4b88;
+  background:linear-gradient(145deg,#542719,#21110f);
+  box-shadow:0 8px 24px #0008,0 0 18px #ff6a2422;
+  font-size:clamp(22px,4vw,34px);
+}
+.faceoff-avatar img{width:100%;height:100%;display:block;object-fit:cover}
+.faceoff-contestant b{max-width:100%;font-size:clamp(11px,1.5vw,13px)}
+.faceoff-bolt{
+  position:absolute;
+  z-index:3;
+  left:50%;
+  top:37%;
+  transform:translate(-50%,-50%) rotate(12deg) scaleX(1.12);
+  font-size:clamp(76px,12vw,126px);
+  line-height:1;
+  color:#ffd34e;
+  filter:drop-shadow(0 0 7px #ff9b24) drop-shadow(0 0 20px #ff4b22);
+  pointer-events:none;
+  user-select:none;
+}
+@media(max-width:600px){
+  .faceoff-versus{gap:8px;padding:11px 7px}
+  .faceoff-avatar{max-width:none;border-radius:11px}
+  .faceoff-bolt{top:34%;font-size:clamp(66px,19vw,94px)}
+}
