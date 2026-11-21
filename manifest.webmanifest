@@ -1,0 +1,12 @@
+{
+  "name": "CONFAM — Music & Community",
+  "short_name": "CONFAM",
+  "description": "La musique nous rassemble.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#100a09",
+  "theme_color": "#100a09",
+  "orientation": "portrait-primary",
+  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
