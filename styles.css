@@ -785,6 +785,6 @@ html{
 .audio-player .play-button::before{content:""!important;width:0!important;height:0!important;border-top:3px solid transparent!important;border-bottom:3px solid transparent!important;border-left:5px solid #fff!important;margin-left:1px!important}
 .audio-player .audio-title{display:none!important}
 .audio-player .audio-main{min-width:0!important}
-.audio-player .waveform{height:13px!important;gap:1px!important}
+.audio-player .waveform{height:8px!important;gap:1px!important}.audio-player .waveform span{transform:scaleY(.62)!important;transform-origin:center!important}
 .audio-player .audio-meta{font-size:6px!important;margin-top:1px!important}
-@media(max-width:560px){.audio-player{gap:4px!important;padding:4px!important;margin:4px 0!important}.audio-player .play-button{width:20px!important;height:20px!important;min-width:20px!important;border-radius:6px!important}.audio-player .waveform{height:12px!important}}
+@media(max-width:560px){.audio-player{gap:4px!important;padding:4px!important;margin:4px 0!important}.audio-player .play-button{width:20px!important;height:20px!important;min-width:20px!important;border-radius:6px!important}.audio-player .waveform{height:7px!important}}
