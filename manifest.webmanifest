@@ -1,12 +1,19 @@
 {
   "name": "CONFAM — Music & Community",
   "short_name": "CONFAM",
-  "description": "La musique nous rassemble.",
+  "description": "La musique nous rassemble. Retrouve les artistes, les sons et la communauté CONFAM.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#100a09",
   "theme_color": "#100a09",
   "orientation": "portrait-primary",
-  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
