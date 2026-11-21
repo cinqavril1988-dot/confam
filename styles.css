@@ -105,3 +105,8 @@ body{background:radial-gradient(ellipse at 65% -20%,#5a1d12 0,transparent 42%),v
 .comment-reply-form{display:flex;gap:8px;margin:8px 0 8px 36px}
 .comment-reply-form input{flex:1;min-width:0;border:1px solid #393247;border-radius:16px;background:#0e0c17;color:#f5f2fa;padding:9px 12px;font-size:12px}
 .comment-reply-form button{border:0;border-radius:16px;background:#9b5cff;color:white;padding:8px 12px;font-size:11px;font-weight:700}
+
+
+/* Bouton pour développer la liste des commentaires */
+.show-more-comments{display:inline-flex;align-items:center;margin:9px 0 4px 36px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:transparent;color:#ff9a5a;font-size:11px;font-weight:700;cursor:pointer}
+.show-more-comments:hover{background:#ff6a2418;border-color:#ff7842}
