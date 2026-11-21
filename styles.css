@@ -554,3 +554,6 @@ html{
  .inline-composer .composer-action-row{padding-left:40px!important}
  .inline-composer .feed-publish-top textarea{min-height:34px!important;height:34px}
 }
+
+/* La classe role-hidden doit rester prioritaire sur le style du bouton micro */
+.inline-composer #voice-record-button.role-hidden{display:none!important}
