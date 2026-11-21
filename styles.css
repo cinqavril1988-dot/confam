@@ -656,3 +656,24 @@ html{
   #inline-composer-wrap #post-message,
   #inline-composer-wrap .beat-options{margin-left:36px!important}
 }
+
+
+/* CORRECTION — ancrer réellement les commandes en bas du cadre */
+#inline-composer-wrap .inline-composer{
+  min-height:108px!important;
+  height:auto!important;
+}
+#inline-composer-wrap .feed-publish-top{
+  flex:1 1 auto!important;
+  min-height:48px!important;
+}
+#inline-composer-wrap .composer-action-row{
+  flex:0 0 25px!important;
+  margin-top:auto!important;
+  align-self:stretch!important;
+}
+@media(max-width:560px){
+  #inline-composer-wrap .inline-composer{min-height:104px!important}
+  #inline-composer-wrap .feed-publish-top{min-height:48px!important}
+  #inline-composer-wrap .composer-action-row{margin-top:auto!important}
+}
