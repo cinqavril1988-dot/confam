@@ -779,37 +779,11 @@ html{
   }
 }
 
-/* Audio CONFAM — player compact, bouton play moderne */
-.audio-player{
-  gap:9px!important;
-  padding:9px 10px!important;
-  margin:9px 0!important;
-  border-radius:12px!important;
-}
-.audio-player .play-button{
-  width:32px!important;height:32px!important;
-  min-width:32px!important;
-  border-radius:11px!important;
-  display:grid!important;place-items:center!important;
-  background:linear-gradient(135deg,#9b5cff,#e74cb4)!important;
-  box-shadow:0 3px 12px #a34cff35!important;
-  color:#fff!important;
-  font-size:0!important;
-  position:relative!important;
-}
-.audio-player .play-button::before{
-  content:""!important;
-  width:0!important;height:0!important;
-  border-top:6px solid transparent!important;
-  border-bottom:6px solid transparent!important;
-  border-left:9px solid #fff!important;
-  margin-left:2px!important;
-}
-.audio-player .audio-title{font-size:10px!important;margin-bottom:4px!important}
-.audio-player .waveform{height:25px!important;gap:1.5px!important}
-.audio-player .audio-meta{font-size:8px!important;margin-top:3px!important}
-@media(max-width:560px){
-  .audio-player{gap:8px!important;padding:8px!important;margin:8px 0!important}
-  .audio-player .play-button{width:30px!important;height:30px!important;min-width:30px!important;border-radius:10px!important}
-  .audio-player .waveform{height:22px!important}
-}
+/* Audio CONFAM — version ultra-compacte */
+.audio-player{gap:6px!important;padding:6px 7px!important;margin:6px 0!important;border-radius:9px!important}
+.audio-player .play-button{width:25px!important;height:25px!important;min-width:25px!important;border-radius:8px!important;display:grid!important;place-items:center!important;background:linear-gradient(135deg,#9b5cff,#e74cb4)!important;box-shadow:0 2px 8px #a34cff30!important;color:#fff!important;font-size:0!important;position:relative!important}
+.audio-player .play-button::before{content:""!important;width:0!important;height:0!important;border-top:4px solid transparent!important;border-bottom:4px solid transparent!important;border-left:7px solid #fff!important;margin-left:1px!important}
+.audio-player .audio-title{font-size:9px!important;margin-bottom:2px!important}
+.audio-player .waveform{height:17px!important;gap:1px!important}
+.audio-player .audio-meta{font-size:7px!important;margin-top:2px!important}
+@media(max-width:560px){.audio-player{gap:5px!important;padding:5px 6px!important;margin:5px 0!important}.audio-player .play-button{width:23px!important;height:23px!important;min-width:23px!important;border-radius:7px!important}.audio-player .play-button::before{border-top-width:3.5px!important;border-bottom-width:3.5px!important;border-left-width:6px!important}.audio-player .waveform{height:15px!important}}
