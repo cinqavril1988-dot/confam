@@ -462,3 +462,8 @@ html{
 
 /* Le bouton d'installation n'apparait pas dans la PWA déjà installée */
 .pwa-install-button.pwa-install-hidden{display:none!important}
+
+
+/* Actions des publications : libelles affirmes et icone de partage moderne */
+.post-actions .action-button{font-weight:700}
+.post-actions .share-icon{width:15px;height:15px;flex:0 0 15px;display:block}
