@@ -876,15 +876,6 @@ html{
  .comment-list{margin:0 12px 12px!important}
 }
 
-/* Immersive player: translucent play control over the cover */
-.audio-immersive-play{background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.48)!important;box-shadow:0 3px 18px rgba(0,0,0,.24)!important;backdrop-filter:blur(5px)!important;color:#fff!important}
-.audio-immersive-play:hover{background:rgba(255,255,255,.23)!important}
-.audio-immersive-play::before{border-top-width:8px!important;border-bottom-width:8px!important;border-left-width:12px!important;border-left-color:#fff!important}
-
-/* Restore clearly visible translucent play button over audio artwork */
-.audio-immersive-art .audio-immersive-play{display:flex!important;visibility:visible!important;opacity:1!important;align-items:center!important;justify-content:center!important;z-index:5!important;position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:58px!important;height:58px!important;min-width:58px!important;padding:0!important;border-radius:50%!important;background:rgba(255,255,255,.16)!important;border:1.5px solid rgba(255,255,255,.7)!important;color:#fff!important;font-size:22px!important;line-height:1!important;text-shadow:0 1px 5px rgba(0,0,0,.65)!important;backdrop-filter:blur(6px)!important;box-shadow:0 2px 18px rgba(0,0,0,.3)!important}
-.audio-immersive-art .audio-immersive-play::before{content:none!important}
-
 /* CONFAM feed: remove the outer publication card frame on all screen sizes */
 .post-list{gap:0!important}
 .post-card{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important}
@@ -931,3 +922,7 @@ html{
 .confam-photo-viewer-content img{display:block;max-width:100%;max-height:calc(90vh - 80px);width:auto;height:auto;object-fit:contain;border-radius:12px;box-shadow:0 16px 60px rgba(0,0,0,.5)}
 .confam-photo-viewer-content audio{width:min(100%,560px);height:42px}
 .confam-photo-viewer-close{position:absolute;right:8px;top:8px;z-index:2;border:1px solid rgba(255,255,255,.22);background:rgba(18,15,27,.75);color:#fff;width:38px;height:38px;border-radius:50%;font-size:24px;display:grid;place-items:center}
+
+/* Toute la pochette audio est une zone de lecture tactile */
+.audio-immersive-art{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.audio-immersive-cover{pointer-events:none}
