@@ -1185,6 +1185,7 @@ html{
   border-radius:0!important;overflow:visible!important;pointer-events:none!important;
 }
 #page-faceoff .faceoff-impact .faceoff-vs-image{
+  animation:none!important;opacity:1!important;transform:none!important;
   width:100%!important;height:100%!important;object-fit:contain!important;
   mix-blend-mode:screen!important;
   -webkit-mask-image:radial-gradient(ellipse 72% 67% at 50% 50%,#000 30%,rgba(0,0,0,.92) 49%,rgba(0,0,0,.45) 69%,transparent 100%)!important;
@@ -1211,3 +1212,5 @@ html{
   #page-faceoff .faceoff-square.faceoff-intro-active{animation:none!important}
   #page-faceoff .faceoff-square.faceoff-intro-active .faceoff-vs-image{animation:none!important;opacity:1!important;transform:none!important}
 }
+
+#page-faceoff .faceoff-square:has(.faceoff-vs-image){animation:none!important}
