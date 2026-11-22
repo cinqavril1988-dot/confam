@@ -1029,3 +1029,104 @@ html{
  #page-faceoff .faceoff-side-info{left:7px!important;right:7px!important;bottom:9px!important;gap:4px!important}
  #page-faceoff .faceoff-side-track{height:6px!important}
 }
+
+
+/* DUEL IMPACT V2 — deux gants qui convergent, collision et éclairs */
+#page-faceoff .faceoff-impact{
+  width:104px!important;height:104px!important;top:46%!important;
+  overflow:visible!important;isolation:isolate!important;
+  filter:drop-shadow(0 0 12px rgba(164,91,255,.7))!important;
+}
+#page-faceoff .faceoff-impact:before{
+  inset:13px!important;border-radius:50%!important;
+  background:radial-gradient(circle,rgba(255,255,255,.98) 0 5%,rgba(255,222,125,.95) 10%,rgba(174,83,255,.72) 27%,rgba(71,170,255,.25) 48%,transparent 72%)!important;
+  filter:blur(3px)!important;animation:confam-impact-flash 1.65s ease-in-out infinite!important;
+}
+#page-faceoff .faceoff-impact .faceoff-glove{
+  position:absolute!important;top:50%!important;z-index:4!important;
+  display:block!important;font-size:39px!important;line-height:1!important;
+  transform-origin:center!important;filter:drop-shadow(0 5px 5px rgba(0,0,0,.65))!important;
+  animation-duration:1.65s!important;animation-timing-function:cubic-bezier(.22,.78,.25,1)!important;
+  animation-iteration-count:infinite!important;
+}
+#page-faceoff .faceoff-impact .faceoff-glove-a{
+  left:0!important;transform:translate(-8%,-50%) rotate(-42deg) scaleX(-1)!important;
+  filter:drop-shadow(0 0 8px rgba(255,83,110,.85)) saturate(1.5)!important;
+  animation-name:confam-glove-left!important;
+}
+#page-faceoff .faceoff-impact .faceoff-glove-b{
+  right:0!important;transform:translate(8%,-50%) rotate(42deg)!important;
+  filter:drop-shadow(0 0 8px rgba(70,190,255,.9)) hue-rotate(175deg) saturate(1.7)!important;
+  animation-name:confam-glove-right!important;
+}
+#page-faceoff .faceoff-impact .faceoff-impact-ring{
+  position:absolute!important;inset:16px!important;z-index:2!important;
+  border:2px solid rgba(255,239,183,.95)!important;border-radius:50%!important;
+  clip-path:none!important;opacity:0!important;
+  animation:confam-impact-ring 1.65s ease-out infinite!important;
+}
+#page-faceoff .faceoff-impact .faceoff-lightning{
+  position:absolute!important;left:50%!important;top:50%!important;z-index:5!important;
+  transform:translate(-50%,-50%) scale(.5) rotate(-12deg)!important;
+  color:#fff!important;font-size:43px!important;font-weight:900!important;font-style:normal!important;
+  line-height:1!important;text-shadow:0 0 5px #fff,0 0 13px #a9eaff,0 0 25px #9a4dff,0 0 38px #e7b6ff!important;
+  animation:confam-lightning-burst 1.65s steps(2,end) infinite!important;
+}
+#page-faceoff .faceoff-impact .faceoff-sparks{
+  position:absolute!important;inset:-8px!important;z-index:6!important;
+  display:grid!important;place-items:center!important;color:#fff!important;
+  font-size:65px!important;font-style:normal!important;
+  text-shadow:0 0 8px #fff,0 0 19px #a85cff!important;
+  animation:confam-spark-burst 1.65s ease-out infinite!important;
+}
+#page-faceoff .faceoff-square:has(.faceoff-impact){animation:confam-square-hit 1.65s ease-in-out infinite}
+@keyframes confam-glove-left{
+  0%,18%{left:-17px;transform:translate(-30%,-50%) rotate(-62deg) scale(.72)}
+  37%{left:calc(50% - 18px);transform:translate(-50%,-50%) rotate(-12deg) scale(1.08)}
+  43%,53%{left:calc(50% - 18px);transform:translate(-50%,-50%) rotate(-12deg) scale(.94)}
+  72%,100%{left:-17px;transform:translate(-30%,-50%) rotate(-62deg) scale(.72)}
+}
+@keyframes confam-glove-right{
+  0%,18%{right:-17px;transform:translate(30%,-50%) rotate(62deg) scale(.72)}
+  37%{right:calc(50% - 18px);transform:translate(50%,-50%) rotate(12deg) scale(1.08)}
+  43%,53%{right:calc(50% - 18px);transform:translate(50%,-50%) rotate(12deg) scale(.94)}
+  72%,100%{right:-17px;transform:translate(30%,-50%) rotate(62deg) scale(.72)}
+}
+@keyframes confam-impact-flash{
+  0%,30%,65%,100%{opacity:.22;transform:scale(.58)}
+  38%,48%{opacity:1;transform:scale(1.25)}
+}
+@keyframes confam-impact-ring{
+  0%,34%{opacity:0;transform:scale(.35)}
+  39%{opacity:1;transform:scale(.75)}
+  58%{opacity:0;transform:scale(1.8)}
+  100%{opacity:0;transform:scale(1.8)}
+}
+@keyframes confam-lightning-burst{
+  0%,34%,56%,100%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(-12deg)}
+  38%,46%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(8deg)}
+  50%{opacity:.35;transform:translate(-50%,-50%) scale(.9) rotate(-8deg)}
+}
+@keyframes confam-spark-burst{
+  0%,35%,100%{opacity:0;transform:scale(.2) rotate(0)}
+  40%{opacity:1;transform:scale(1.15) rotate(28deg)}
+  57%{opacity:0;transform:scale(1.8) rotate(75deg)}
+}
+@keyframes confam-square-hit{
+  0%,34%,55%,100%{transform:translateX(0)}
+  39%{transform:translateX(-2px)}
+  43%{transform:translateX(2px)}
+  47%{transform:translateX(-1px)}
+}
+@media(max-width:600px){
+ #page-faceoff .faceoff-impact{width:82px!important;height:82px!important}
+ #page-faceoff .faceoff-impact .faceoff-glove{font-size:31px!important}
+ #page-faceoff .faceoff-impact .faceoff-lightning{font-size:35px!important}
+ #page-faceoff .faceoff-impact .faceoff-sparks{font-size:52px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #page-faceoff .faceoff-impact *,
+ #page-faceoff .faceoff-square:has(.faceoff-impact){animation:none!important}
+ #page-faceoff .faceoff-impact .faceoff-glove-a{left:calc(50% - 35px)!important;transform:translate(-50%,-50%) rotate(-12deg)!important}
+ #page-faceoff .faceoff-impact .faceoff-glove-b{right:calc(50% - 35px)!important;transform:translate(50%,-50%) rotate(12deg)!important}
+}
