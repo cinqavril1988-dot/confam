@@ -884,3 +884,12 @@ html{
 /* Restore clearly visible translucent play button over audio artwork */
 .audio-immersive-art .audio-immersive-play{display:flex!important;visibility:visible!important;opacity:1!important;align-items:center!important;justify-content:center!important;z-index:5!important;position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:58px!important;height:58px!important;min-width:58px!important;padding:0!important;border-radius:50%!important;background:rgba(255,255,255,.16)!important;border:1.5px solid rgba(255,255,255,.7)!important;color:#fff!important;font-size:22px!important;line-height:1!important;text-shadow:0 1px 5px rgba(0,0,0,.65)!important;backdrop-filter:blur(6px)!important;box-shadow:0 2px 18px rgba(0,0,0,.3)!important}
 .audio-immersive-art .audio-immersive-play::before{content:none!important}
+
+/* CONFAM feed: remove the outer publication card frame on all screen sizes */
+.post-list{gap:0!important}
+.post-card{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important}
+.post-card+.post-card{border-top:1px solid rgba(255,255,255,.08)!important}
+.post-head{padding:14px 12px 8px!important}
+.post-content{padding:0 12px!important;margin:10px 0 12px!important}
+.post-actions{margin:0 12px 10px!important;padding-top:10px!important}
+.post-duel-request{margin:0 12px 8px!important}
