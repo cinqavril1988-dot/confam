@@ -1130,3 +1130,49 @@ html{
  #page-faceoff .faceoff-impact .faceoff-glove-a{left:calc(50% - 43px)!important;transform:translate(-50%,-50%) rotate(-12deg)!important}
  #page-faceoff .faceoff-impact .faceoff-glove-b{right:calc(50% - 43px)!important;transform:translate(50%,-50%) rotate(12deg)!important}
 }
+
+
+/* DUEL INTRO — supplied VS artwork, one fall and one impact only */
+#page-faceoff .faceoff-impact{
+  width:clamp(150px,34vw,230px)!important;
+  height:clamp(150px,34vw,230px)!important;
+  top:47%!important;left:50%!important;
+  transform:translate(-50%,-50%)!important;
+  display:grid!important;place-items:center!important;
+  overflow:visible!important;z-index:8!important;
+  background:none!important;filter:none!important;
+  animation:none!important;
+}
+#page-faceoff .faceoff-impact:before{content:none!important;display:none!important}
+#page-faceoff .faceoff-impact .faceoff-vs-image{
+  display:block!important;width:100%!important;height:100%!important;
+  object-fit:contain!important;mix-blend-mode:screen!important;
+  pointer-events:none!important;
+  filter:drop-shadow(0 5px 15px rgba(255,190,95,.5))!important;
+  opacity:0;
+  animation:confam-vs-drop 950ms cubic-bezier(.18,.72,.24,1.12) 120ms 1 both!important;
+}
+#page-faceoff .faceoff-square:has(.faceoff-vs-image){
+  animation:confam-vs-single-hit 430ms ease-out 760ms 1 both!important;
+}
+@keyframes confam-vs-drop{
+  0%{opacity:0;transform:translateY(-155%) scale(.78)}
+  58%{opacity:1;transform:translateY(12%) scale(1.12)}
+  76%{opacity:1;transform:translateY(-5%) scale(.97)}
+  90%,100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes confam-vs-single-hit{
+  0%,22%{transform:translateX(0)}
+  34%{transform:translateX(-5px)}
+  48%{transform:translateX(5px)}
+  62%{transform:translateX(-3px)}
+  78%{transform:translateX(2px)}
+  100%{transform:translateX(0)}
+}
+@media(max-width:600px){
+ #page-faceoff .faceoff-impact{width:clamp(132px,42vw,174px)!important;height:clamp(132px,42vw,174px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #page-faceoff .faceoff-impact .faceoff-vs-image{animation:none!important;opacity:1!important;transform:none!important}
+ #page-faceoff .faceoff-square:has(.faceoff-vs-image){animation:none!important}
+}
