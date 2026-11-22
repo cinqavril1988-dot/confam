@@ -916,3 +916,9 @@ html{
 .faceoff-contestant:first-child .faceoff-participant-vote{color:#e7b86c}
 .faceoff-contestant:last-child .faceoff-participant-vote{color:#d887a8}
 .faceoff-vote-progress,.faceoff-vote-track{display:none!important}
+
+/* Profile: discreet sign-out affordance */
+.profile-panel{position:relative;padding-right:48px!important}
+.profile-logout-button{position:absolute;right:12px;top:12px;width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.09);border-radius:9px;background:rgba(255,255,255,.025);color:#8f879d;font-size:15px;opacity:.72;transition:opacity .2s,color .2s,border-color .2s}
+.profile-logout-button:hover{opacity:1;color:#d7b5ff;border-color:#5a4279;background:#201a2c}
+@media(max-width:800px){.profile-panel{padding-right:46px!important}.profile-logout-button{right:10px;top:10px}}
