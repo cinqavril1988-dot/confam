@@ -989,3 +989,43 @@ html{
     width:52px!important;height:52px!important;min-width:52px!important;
   }
 }
+
+
+/* CONFAM DUELS — carré face-à-face, gants d'impact et vote intégré */
+#page-faceoff .faceoff-card{padding:18px 0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#page-faceoff .faceoff-card+.faceoff-card{border-top:1px solid rgba(255,255,255,.09)!important}
+#page-faceoff .faceoff-square{
+  position:relative!important;display:grid!important;grid-template-columns:1fr 1fr!important;
+  width:100%!important;aspect-ratio:1/1!important;max-height:560px!important;min-height:0!important;
+  overflow:hidden!important;border-radius:18px!important;background:#100c19!important;
+  border:1px solid rgba(190,140,255,.25)!important;isolation:isolate!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.28),0 0 28px rgba(142,76,242,.10)!important;
+}
+#page-faceoff .faceoff-square-side{position:relative!important;min-width:0!important;min-height:0!important;overflow:hidden!important;background:linear-gradient(145deg,#342047,#17121f)!important}
+#page-faceoff .faceoff-square-side+ .faceoff-square-side{border-left:1px solid rgba(255,255,255,.18)!important}
+#page-faceoff .faceoff-side-photo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}
+#page-faceoff .faceoff-side-fallback{position:absolute!important;inset:0!important;display:grid!important;place-items:center!important;font-size:clamp(38px,10vw,76px)!important;font-weight:900!important;color:#fff!important;background:radial-gradient(circle at 50% 35%,#9c5cff88,transparent 55%),linear-gradient(145deg,#38234f,#15111e)!important}
+#page-faceoff .faceoff-side-shade{position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(8,5,14,.02) 35%,rgba(8,5,14,.12) 53%,rgba(8,5,14,.88) 100%)!important;pointer-events:none!important}
+#page-faceoff .faceoff-audio-play{position:absolute!important;left:50%!important;top:43%!important;transform:translate(-50%,-50%)!important;width:54px!important;height:54px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,.62)!important;background:rgba(132,70,220,.82)!important;color:#fff!important;font-size:21px!important;display:grid!important;place-items:center!important;z-index:4!important;box-shadow:0 0 0 6px rgba(255,255,255,.13),0 8px 26px rgba(0,0,0,.35)!important;backdrop-filter:blur(8px)!important}
+#page-faceoff .faceoff-audio-play.is-playing{background:rgba(224,69,139,.88)!important}
+#page-faceoff .faceoff-audio-source{display:none!important}
+#page-faceoff .faceoff-side-info{position:absolute!important;left:10px!important;right:10px!important;bottom:12px!important;z-index:3!important;display:grid!important;gap:5px!important;text-align:center!important}
+#page-faceoff .faceoff-side-info b{font-size:clamp(11px,2.4vw,16px)!important;color:#fff!important;text-shadow:0 2px 8px #000!important;overflow-wrap:anywhere!important}
+#page-faceoff .faceoff-side-percent{font-size:clamp(19px,4vw,27px)!important;line-height:1!important;font-weight:900!important;color:#fff!important;text-shadow:0 2px 9px #000!important}
+#page-faceoff .faceoff-side-track{height:7px!important;width:100%!important;border-radius:99px!important;overflow:hidden!important;background:rgba(255,255,255,.28)!important;box-shadow:0 1px 5px #0008!important}
+#page-faceoff .faceoff-side-track i{display:block!important;height:100%!important;border-radius:99px!important;background:linear-gradient(90deg,#ffc45e,#ff7548)!important;transition:width .45s ease!important}
+#page-faceoff .faceoff-side-b .faceoff-side-track i{background:linear-gradient(90deg,#ff8cbb,#d84c9b)!important}
+#page-faceoff .faceoff-impact{position:absolute!important;left:50%!important;top:47%!important;transform:translate(-50%,-50%)!important;width:76px!important;height:76px!important;display:grid!important;place-items:center!important;z-index:5!important;pointer-events:none!important}
+#page-faceoff .faceoff-impact:before{content:""!important;position:absolute!important;inset:0!important;border-radius:50%!important;background:radial-gradient(circle,#fff9 0 8%,#ffcc6c99 15%,#a95cff55 42%,transparent 70%)!important;filter:blur(2px)!important;animation:faceoff-impact-pulse 1.8s ease-in-out infinite!important}
+#page-faceoff .faceoff-impact span{position:relative!important;font-size:42px!important;line-height:1!important;filter:drop-shadow(0 0 9px #ff9d58)!important;text-shadow:0 3px 12px #000!important;transform:rotate(-12deg)!important}
+#page-faceoff .faceoff-impact i{position:absolute!important;inset:-7px!important;border:2px solid rgba(255,194,102,.8)!important;border-radius:50%!important;clip-path:polygon(50% 0,58% 32%,100% 18%,69% 50%,100% 82%,58% 68%,50% 100%,42% 68%,0 82%,31% 50%,0 18%,42% 32%)!important;opacity:.75!important}
+@keyframes faceoff-impact-pulse{0%,100%{transform:scale(.88);opacity:.65}50%{transform:scale(1.12);opacity:1}}
+#page-faceoff .faceoff-actions{margin:12px 0!important}
+@media(max-width:600px){
+ #page-faceoff .faceoff-square{border-radius:13px!important;max-height:none!important}
+ #page-faceoff .faceoff-audio-play{width:44px!important;height:44px!important;font-size:18px!important}
+ #page-faceoff .faceoff-impact{width:58px!important;height:58px!important}
+ #page-faceoff .faceoff-impact span{font-size:33px!important}
+ #page-faceoff .faceoff-side-info{left:7px!important;right:7px!important;bottom:9px!important;gap:4px!important}
+ #page-faceoff .faceoff-side-track{height:6px!important}
+}
