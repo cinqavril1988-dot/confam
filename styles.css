@@ -911,3 +911,8 @@ html{
 .faceoff-social{border-top:0!important;margin-top:10px!important;padding-top:0!important}
 .faceoff-comments{border:0!important;background:transparent!important}
 @media(max-width:600px){.faceoff-card{padding:16px 0!important}.faceoff-vote-progress{padding:0!important}}
+/* Duel — vote share shown beside each participant, no progress bar */
+.faceoff-participant-vote{font-size:12px;font-weight:750;letter-spacing:.2px;color:#c9b7d8;line-height:1;margin:2px 0 3px;}
+.faceoff-contestant:first-child .faceoff-participant-vote{color:#e7b86c}
+.faceoff-contestant:last-child .faceoff-participant-vote{color:#d887a8}
+.faceoff-vote-progress,.faceoff-vote-track{display:none!important}
