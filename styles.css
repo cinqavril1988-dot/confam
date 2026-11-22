@@ -988,3 +988,29 @@ html{
     50%{box-shadow:0 3px 18px rgba(0,0,0,.3),0 0 0 5px rgba(191,135,255,.09)}
   }
 }
+
+
+/* HOTFIX — le lecteur immersif utilise le caractère ▶ dans le bouton */
+@media(max-width:800px){
+  .audio-immersive-art .audio-immersive-play{
+    color:#fff!important;
+    font-size:24px!important;
+    line-height:1!important;
+    text-indent:0!important;
+    opacity:1!important;
+    visibility:visible!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:0!important;
+    background:rgba(255,255,255,.18)!important;
+    border:1.5px solid rgba(255,255,255,.78)!important;
+    -webkit-backdrop-filter:blur(7px)!important;
+    backdrop-filter:blur(7px)!important;
+    text-shadow:0 1px 5px rgba(0,0,0,.55)!important;
+  }
+  .audio-immersive-art .audio-immersive-play::before{
+    content:none!important;
+    display:none!important;
+  }
+}
